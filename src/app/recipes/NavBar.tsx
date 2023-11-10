@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
+import AIChatButton from "@/components/AIChatButton";
 
 const NavBar = () => {
   const { theme } = useTheme();
@@ -35,6 +36,7 @@ const NavBar = () => {
               <Plus size={20} className="mr-2" />
               Add Recipe
             </Button>
+            <AIChatButton />
           </div>
         </div>
       </div>
