@@ -1,3 +1,4 @@
+
 import {
   CreateRecipeSchema,
   createRecipeSchema,
@@ -25,6 +26,7 @@ import LoadingButton from "./LoadingButton";
 import { useRouter } from "next/navigation";
 import { Recipe } from "@prisma/client";
 import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 interface Props {
   open: boolean;
@@ -33,7 +35,8 @@ interface Props {
 }
 
 const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
-  const [deleting, setDeleting] = useState(false)
+  const { userId } = useAuth();
+  const [deleting, setDeleting] = useState(false);
   const router = useRouter();
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
@@ -78,16 +81,16 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
 
   //*DELETE
   //! add confirmation dialog later
-  const deleteRecipe = async() => {
+  const deleteRecipe = async () => {
     if (!recipeToEdit) return;
-    setDeleting(true)
+    setDeleting(true);
     try {
       const response = await fetch("/api/recipes", {
         method: "DELETE",
         body: JSON.stringify({
-          id: recipeToEdit.id
-        })
-      })
+          id: recipeToEdit.id,
+        }),
+      });
       if (!response.ok) throw Error("Status code: " + response.status);
       router.refresh();
       setOpen(false);
@@ -96,16 +99,18 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
       //!add toastify later
       alert("something went wrong");
     } finally {
-      setDeleting(false)
+      setDeleting(false);
     }
-  }
+  };
   return (
     //Using Shadcn form components  which uses react-hook-form under the hood
     // Make sure to import from the /ui folder which are the shadcn components
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{recipeToEdit ? "Edit Recipe" : "Add Recipe"}</DialogTitle>
+          <DialogTitle>
+            {recipeToEdit ? "Edit Recipe" : "Add Recipe"}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -139,12 +144,13 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
             <DialogFooter className="gap-1">
               {recipeToEdit && (
                 <LoadingButton
-                variant="destructive"
-                loading={deleting}
-                disabled={form.formState.isSubmitting}
-                onClick={deleteRecipe}
-                type="button">
-                  Delete recipe               
+                  variant="destructive"
+                  loading={deleting}
+                  disabled={form.formState.isSubmitting}
+                  onClick={deleteRecipe}
+                  type="button"
+                >
+                  Delete recipe
                 </LoadingButton>
               )}
               <LoadingButton

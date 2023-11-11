@@ -5,7 +5,8 @@ import {z} from 'zod'
 export const createRecipeSchema = z.object({
     //*title is string and has at least 1 character, customised error message
     title: z.string().min(1, {message: "Title is required"}),
-    content: z.string().min(1, {message: "Add some content"})
+    content: z.string().min(1, {message: "Add some content"}),
+    cuisine: z.string().array()
 })
 
 //*can use this for type safety on form later 

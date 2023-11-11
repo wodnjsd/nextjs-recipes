@@ -7,7 +7,7 @@ import { ThemeProvider } from "./ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "KimchiQueen",
+  title: "Spicify",
   description: "Your ultimate recipe companion",
 };
 

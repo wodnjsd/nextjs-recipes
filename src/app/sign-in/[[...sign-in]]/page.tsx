@@ -2,7 +2,7 @@ import { SignIn } from "@clerk/nextjs"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "KimchiQueen - Sign In"
+  title: "Spicify - Sign In"
 }
 
 const SignInPage = () => {

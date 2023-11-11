@@ -9,13 +9,15 @@ import {
   CardTitle,
 } from "./ui/card";
 import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import AddEditDialog from "./AddEditDialog";
 
 interface Props {
   recipe: Recipe;
 }
 
-const Recipe = ({ recipe }: Props) => {
+const RecipeCard = ({ recipe }: Props) => {
+  const { userId } = useAuth();
   const [showEditDialog, setShowEditDialog] = useState(false);
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
@@ -39,6 +41,7 @@ const Recipe = ({ recipe }: Props) => {
           <p className="whitespace-pre-line">{recipe.content}</p>
         </CardContent>
       </Card>
+      {/* userId === recipe.userId &&  */}
       <AddEditDialog
         open={showEditDialog}
         setOpen={setShowEditDialog}
@@ -48,4 +51,4 @@ const Recipe = ({ recipe }: Props) => {
   );
 };
 
-export default Recipe;
+export default RecipeCard;

@@ -8,7 +8,7 @@ export default function Home() {
       <div className="flex items-center gap-4">
         <span>Logo</span>
         <span className="tracking-light text-4xl font-extrabold">
-          KimchiQueen
+          Spicify
         </span>
       </div>
       <p className="text-center max-w-prose">

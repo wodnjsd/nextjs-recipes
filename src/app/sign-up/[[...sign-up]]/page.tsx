@@ -2,7 +2,7 @@ import { SignUp } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KimchiQueen - Sign Up"
+  title: "Spicify - Sign Up"
 }
 
 const SignUpPage = () => {
