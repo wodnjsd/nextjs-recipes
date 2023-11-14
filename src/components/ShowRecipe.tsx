@@ -88,7 +88,7 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             {/* fix this */}
-            <p>Created by: {user?.username}</p>
+            <p>Created by: {recipe.author}</p>
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-12">

@@ -19,6 +19,7 @@ model Recipe {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   userId       String
+  author       String
   likes        Int?
 
   //*convention that collection in MongoDB has name that is lower case and plural
@@ -35,6 +36,7 @@ model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String
   userId    String
+  author    String
   createdAt DateTime @default(now())
   recipeId  String   @db.ObjectId
   Recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)

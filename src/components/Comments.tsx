@@ -5,6 +5,7 @@ interface Props {
   comments: Comment[];
 }
 const Comments = ({ comments }: Props) => {
+
   //* DELETE COMMENT
   // const onDelete = async (id:String) => {
   //   try  {
@@ -31,7 +32,7 @@ const Comments = ({ comments }: Props) => {
           <button type="button" className="p-1">
             <Delete size={18} strokeWidth={1}/>
           </button>
-          <span>{comment.userId}</span>
+          <span>{comment.author}</span>
         </div>
       ))}
     </div>

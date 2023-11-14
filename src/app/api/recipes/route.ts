@@ -6,7 +6,7 @@ import {
   deleteRecipeSchema,
   updateRecipeSchema,
 } from "@/lib/validation/recipe";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 // import { revalidatePath, revalidateTag } from "next/cache";
 
 //* CREATE
@@ -26,10 +26,13 @@ export async function POST(req: Request) {
     const { title, instructions } = parseResult.data;
 
     const { userId } = auth();
+    const user = await currentUser()
+    const author = user && user.username? user.username: user?.firstName
 
-    if (!userId) {
+    if (!userId || !author) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
+
     //generate embedding
     const embedding = await getEmbeddingForRecipe(title, instructions);
 
@@ -43,6 +46,7 @@ export async function POST(req: Request) {
           title,
           instructions,
           userId,
+          author
         },
       });
       //creating entry in Pincone

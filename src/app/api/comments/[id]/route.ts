@@ -1,11 +1,11 @@
 import prisma from "@/lib/db/prisma";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import {
   createCommentSchema,
   deleteCommentSchema,
 } from "@/lib/validation/comment";
 import { NextRequest } from "next/server";
-import { revalidatePath } from "next/cache";
+// import { revalidatePath } from "next/cache";
 
 //! Will not be adding comments into embedding for now
 
@@ -27,8 +27,10 @@ export async function POST(
 
     const { content } = parseResult.data;
     const { userId } = auth();
+    const user = await currentUser()
+    const author = user && user.username? user.username: user?.firstName
 
-    if (!userId) {
+    if (!userId || !author) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
     const comment = await prisma.comment.create({
@@ -38,6 +40,7 @@ export async function POST(
         Recipe: {
           connect: { id: recipeId },
         },
+        author
       },
     });
 

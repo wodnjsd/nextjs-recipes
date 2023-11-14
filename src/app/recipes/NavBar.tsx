@@ -3,7 +3,7 @@
 import AddRecipe from "@/components/AddEditDialog";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -24,14 +24,26 @@ const NavBar = () => {
             <span className="font-bold">Spicify</span>
           </Link>
           <div className="flex items-center gap-2">
-            <UserButton
-              afterSignOutUrl="/"
-              appearance={{
-                baseTheme: theme === "dark" ? dark : undefined,
-                elements: { avatarBox: { width: "2.5rem", height: "2.5rem" } },
-              }}
-            />
             <ThemeToggleButton />
+            <SignedIn>
+              {/* Mount the UserButton component */}
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  baseTheme: theme === "dark" ? dark : undefined,
+                  elements: {
+                    avatarBox: { width: "2.5rem", height: "2.5rem" },
+                  },
+                }}
+              />
+            </SignedIn>
+            <SignedOut>
+              {/* Signed out users get sign in button */}
+              <SignInButton>
+                <Button>Sign In</Button>
+              </SignInButton>
+            </SignedOut>
+
             <Button onClick={() => setShowDialog(true)}>
               <Plus size={20} className="mr-2" />
               Add Recipe
