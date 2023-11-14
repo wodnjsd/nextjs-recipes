@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
@@ -18,6 +18,7 @@ import Comments from "./Comments";
 import AddEditDialog from "./AddEditDialog";
 import DeleteConfirm from "./DeleteConfirm";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { useToast } from "./ui/use-toast";
 // import { revalidateTag } from "next/cache";
 
 type Props = {
@@ -31,6 +32,7 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
   const [comment, setComment] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
@@ -52,6 +54,7 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
       //!add toast later
       alert("something went wrong");
     }
+    toast({description: "Comment added"})
   };
 
   return (
@@ -89,7 +92,7 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
                 Comment
               </button>
             </form>
-            <Comments comments={comments} />
+            <Comments comments={comments} recipeId={recipe.id} />
           </div>
         </CardContent>
         {/* //* Edit and delete only available if you're the recipe creator  */}

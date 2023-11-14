@@ -23,7 +23,8 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
 import { Recipe } from "@prisma/client";
-import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
+import LoadingButton from "./LoadingButton";
 
 interface Props {
   open: boolean;
@@ -33,6 +34,7 @@ interface Props {
 
 const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
     // add default values so they are not undefined, and correct error messages will appear
@@ -45,9 +47,8 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
-    console.log("adding");
+    //update
     try {
-      console.log("adding");
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },
@@ -58,7 +59,9 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
           }),
         });
         if (!response.ok) throw Error("Status code: " + response.status);
+        toast({ description: "Recipe updated" });
       } else {
+        //create
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },
           method: "POST",
@@ -67,9 +70,11 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         if (!response.ok) throw Error("Status code: " + response.status);
         //reset input fields if successful
         form.reset();
+        toast({ description: "Recipe created!" });
       }
       //refresh server component
       router.refresh();
+
       //close dialog
       setOpen(false);
     } catch (err) {
@@ -119,15 +124,14 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
               )}
             />
             <DialogFooter className="gap-1">
-              <Button type="submit">SUbmit</Button>
-              {/* <LoadingButton
+              {/* <Button type="submit">SUbmit</Button> */}
+              <LoadingButton
                 type="submit"
                 // loading is true until onSubmit async function returns
                 loading={form.formState.isSubmitting}
-                disabled={deleting}
               >
                 Submit
-              </LoadingButton> */}
+              </LoadingButton>
             </DialogFooter>
           </form>
         </Form>

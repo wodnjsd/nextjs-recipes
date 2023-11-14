@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { DialogClose, DialogFooter, DialogTitle } from "./ui/dialog";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "./ui/use-toast";
 
 interface Props {
   recipeId: String;
@@ -11,8 +12,9 @@ interface Props {
 const DeleteConfirm = ({ recipeId }: Props) => {
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
+  const { toast} = useToast()
 
-  //*DELETE
+  //*DELETE RECIPE
   //! add confirmation dialog later
   const deleteRecipe = async () => {
     setDeleting(true);
@@ -34,8 +36,10 @@ const DeleteConfirm = ({ recipeId }: Props) => {
       alert("something went wrong");
     } finally {
       setDeleting(false);
+      toast({variant:"destructive", description:"Recipe deleted"})
     }
   };
+
 
   return (
     <>
