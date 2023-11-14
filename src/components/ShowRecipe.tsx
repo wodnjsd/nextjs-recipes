@@ -16,6 +16,8 @@ import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import Comments from "./Comments";
 import AddEditDialog from "./AddEditDialog";
+import DeleteConfirm from "./DeleteConfirm";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 // import { revalidateTag } from "next/cache";
 
 type Props = {
@@ -26,10 +28,8 @@ type Props = {
 const ShowRecipe = ({ recipe, comments }: Props) => {
   //!this is wrong - will show the current user not the creator?
   const { userId } = useAuth();
-  const { user } = useUser();
   const [comment, setComment] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const router = useRouter();
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
@@ -54,31 +54,6 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
     }
   };
 
-  //*DELETE
-  //! add confirmation dialog later
-  const deleteRecipe = async () => {
-    setDeleting(true);
-    // revalidateTag('recipes')
-    try {
-      const response = await fetch("/api/recipes", {
-        // next: {tags: ['recipes']},
-        method: "DELETE",
-        body: JSON.stringify({
-          id: recipe.id,
-        }),
-      });
-      if (!response.ok) throw Error("Status code: " + response.status);
-      router.push('/recipes')
-      router.refresh()
-    } catch (err) {
-      console.log(err);
-      //!add toastify later
-      alert("something went wrong");
-    } finally {
-      setDeleting(false);
-    }
-  };
-
   return (
     <>
       <Card className="flex w-2/3 flex-col gap-16 px-14 py-8">
@@ -87,8 +62,8 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
           <CardDescription>
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
-            {/* fix this */}
-            <p>Created by: {recipe.author}</p>
+            <br />
+            Created by: {recipe.author}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-12">
@@ -109,9 +84,9 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
                 type="button"
                 onClick={onSubmit}
                 disabled={!comment}
-                className="border p-2"
+                className="rounded-lg border p-1 text-sm"
               >
-                Add Comment
+                Comment
               </button>
             </form>
             <Comments comments={comments} />
@@ -123,14 +98,22 @@ const ShowRecipe = ({ recipe, comments }: Props) => {
             <Button variant="outline" onClick={() => setShowDialog(true)}>
               Edit
             </Button>
-            <LoadingButton
-              variant="destructive"
-              loading={deleting}
-              onClick={deleteRecipe}
-              type="button"
-            >
-              Delete recipe
-            </LoadingButton>
+            {/* <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Delete recipe</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <DeleteConfirm recipeId={recipe.id}/>
+              </AlertDialogContent>
+            </AlertDialog> */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive">Delete recipe</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DeleteConfirm recipeId={recipe.id} />
+              </DialogContent>
+            </Dialog>
           </CardFooter>
         )}
       </Card>

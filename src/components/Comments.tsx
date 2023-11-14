@@ -27,12 +27,12 @@ const Comments = ({ comments }: Props) => {
     <div>
       {comments.map((comment) => (
         <div key={comment.id}>
-          <p>{comment.content}</p>
+          <p className="text-sm">{comment.content}</p>
           {/* add hover transformation */}
           <button type="button" className="p-1">
             <Delete size={18} strokeWidth={1}/>
           </button>
-          <span>{comment.author}</span>
+          <span className="text-xs">{comment.author}</span>
         </div>
       ))}
     </div>
