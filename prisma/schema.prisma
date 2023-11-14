@@ -11,15 +11,16 @@ datasource db {
 }
 
 model Recipe {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  cuisine   String?
-  comments  String[] 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  userId    String    
- 
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  instructions String
+  cuisine      String?
+  comments     Comment[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  userId       String
+  likes        Int?
+
   //*convention that collection in MongoDB has name that is lower case and plural
   @@map("recipes")
 }
@@ -30,11 +31,13 @@ model Recipe {
 //   recipes Recipe[]
 // }
 
-// model Comment {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   content   String
-//   userId    String   @db.ObjectId
-//   createdAt DateTime @default(now())
-//   Recipe    Recipe   @relation(fields: [recipeId], references: [id])
-//   recipeId  String   @db.ObjectId
-// }
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  userId    String
+  createdAt DateTime @default(now())
+  recipeId  String   @db.ObjectId
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}

@@ -7,13 +7,14 @@ import {
   updateRecipeSchema,
 } from "@/lib/validation/recipe";
 import { auth } from "@clerk/nextjs";
+// import { revalidatePath, revalidateTag } from "next/cache";
 
 //* CREATE
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    //safeParse to throw our own error message
+    //safeParse to throw our custom error message
     const parseResult = createRecipeSchema.safeParse(body);
 
     //if validation fails
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { title, content } = parseResult.data;
+    const { title, instructions } = parseResult.data;
 
     const { userId } = auth();
 
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
     //generate embedding
-    const embedding = await getEmbeddingForRecipe(title, content);
+    const embedding = await getEmbeddingForRecipe(title, instructions);
 
     //* wrapping mongodb and pinecone operations in prisma transaction
     //* can do multiple database operations and will only be applied if they all succeed
@@ -40,13 +41,13 @@ export async function POST(req: Request) {
       const recipe = await tx.recipe.create({
         data: {
           title,
-          content,
+          instructions,
           userId,
         },
       });
       //creating entry in Pincone
       //need to put Pinecone after mongodb as prisma is only part of mongodb operation
-      // which means pinecone operation cannot be rolled back 
+      // which means pinecone operation cannot be rolled back
       //if pinecone operation fails mongodb create will be undone
       await recipesIndex.upsert([
         {
@@ -76,7 +77,7 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { id, title, content } = parseResult.data;
+    const { id, title, instructions } = parseResult.data;
 
     //check recipe exists with the id
     const recipe = await prisma.recipe.findUnique({ where: { id } });
@@ -90,26 +91,26 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
-    const embedding = await getEmbeddingForRecipe(title, content)
+    const embedding = await getEmbeddingForRecipe(title, instructions);
 
-    const updatedRecipe = await prisma.$transaction(async(tx) => {
+    const updatedRecipe = await prisma.$transaction(async (tx) => {
       const updatedRecipe = await tx.recipe.update({
         where: { id },
         data: {
           title,
-          content,
+          instructions,
         },
       });
       await recipesIndex.upsert([
         {
           id,
           values: embedding,
-          metadata: {userId}
-        }
-      ])
-      return updatedRecipe
-    })
- 
+          metadata: { userId },
+        },
+      ]);
+      return updatedRecipe;
+    });
+
     return Response.json({ updatedRecipe }, { status: 200 });
   } catch (err) {
     console.log(err);
@@ -119,6 +120,8 @@ export async function PUT(req: Request) {
 
 //* DELETE
 export async function DELETE(req: Request) {
+  // revalidatePath('/recipes', 'page')
+
   try {
     const body = await req.json();
     const parseResult = deleteRecipeSchema.safeParse(body);
@@ -140,10 +143,11 @@ export async function DELETE(req: Request) {
     if (!userId || userId !== recipe.userId) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
-    await prisma.$transaction(async(tx) => {
+    await prisma.$transaction(async (tx) => {
       await tx.recipe.delete({ where: { id } });
-      await recipesIndex.deleteOne(id)
-    })
+      await recipesIndex.deleteOne(id);
+    });
+    // revalidatePath("/recipes", 'page');
 
     return Response.json({ message: "Recipe deleted" }, { status: 200 });
   } catch (err) {
@@ -152,7 +156,7 @@ export async function DELETE(req: Request) {
   }
 }
 
-async function getEmbeddingForRecipe(title: string, content: string) {
+async function getEmbeddingForRecipe(title: string, instructions: string) {
   //from openai file
-  return getEmbedding(title + "\n\n" + content);
+  return getEmbedding(title + "\n\n" + instructions);
 }

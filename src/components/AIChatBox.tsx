@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Message } from "ai";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   open: boolean;

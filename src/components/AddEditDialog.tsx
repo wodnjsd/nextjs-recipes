@@ -1,4 +1,3 @@
-
 import {
   CreateRecipeSchema,
   createRecipeSchema,
@@ -22,11 +21,9 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import LoadingButton from "./LoadingButton";
 import { useRouter } from "next/navigation";
 import { Recipe } from "@prisma/client";
-import { useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 interface Props {
   open: boolean;
@@ -35,23 +32,25 @@ interface Props {
 }
 
 const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
-  const { userId } = useAuth();
-  const [deleting, setDeleting] = useState(false);
   const router = useRouter();
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
     // add default values so they are not undefined, and correct error messages will appear
     defaultValues: {
       title: recipeToEdit?.title || "",
-      content: recipeToEdit?.content || "",
+      instructions: recipeToEdit?.instructions || "",
+      cuisine: [],
     },
   });
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
+    console.log("adding");
     try {
+      console.log("adding");
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
+          // next: { tags: ["recipes"] },
           method: "PUT",
           body: JSON.stringify({
             id: recipeToEdit.id,
@@ -61,6 +60,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         if (!response.ok) throw Error("Status code: " + response.status);
       } else {
         const response = await fetch("/api/recipes", {
+          // next: { tags: ["recipes"] },
           method: "POST",
           body: JSON.stringify(input),
         });
@@ -79,29 +79,6 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
     }
   };
 
-  //*DELETE
-  //! add confirmation dialog later
-  const deleteRecipe = async () => {
-    if (!recipeToEdit) return;
-    setDeleting(true);
-    try {
-      const response = await fetch("/api/recipes", {
-        method: "DELETE",
-        body: JSON.stringify({
-          id: recipeToEdit.id,
-        }),
-      });
-      if (!response.ok) throw Error("Status code: " + response.status);
-      router.refresh();
-      setOpen(false);
-    } catch (err) {
-      console.log(err);
-      //!add toastify later
-      alert("something went wrong");
-    } finally {
-      setDeleting(false);
-    }
-  };
   return (
     //Using Shadcn form components  which uses react-hook-form under the hood
     // Make sure to import from the /ui folder which are the shadcn components
@@ -130,37 +107,27 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
             />
             <FormField
               control={form.control}
-              name="content"
+              name="instructions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Recipe content</FormLabel>
+                  <FormLabel>Recipe instructions</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Recipe content" {...field} />
+                    <Textarea placeholder="Recipe instructions" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter className="gap-1">
-              {recipeToEdit && (
-                <LoadingButton
-                  variant="destructive"
-                  loading={deleting}
-                  disabled={form.formState.isSubmitting}
-                  onClick={deleteRecipe}
-                  type="button"
-                >
-                  Delete recipe
-                </LoadingButton>
-              )}
-              <LoadingButton
+              <Button type="submit">SUbmit</Button>
+              {/* <LoadingButton
                 type="submit"
                 // loading is true until onSubmit async function returns
                 loading={form.formState.isSubmitting}
                 disabled={deleting}
               >
                 Submit
-              </LoadingButton>
+              </LoadingButton> */}
             </DialogFooter>
           </form>
         </Form>

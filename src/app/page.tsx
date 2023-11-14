@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-24">
       <div className="flex items-center gap-4">
-        <span>Logo</span>
+        {/* <span>Logo</span> */}
         <span className="tracking-light text-4xl font-extrabold">
           Spicify
         </span>

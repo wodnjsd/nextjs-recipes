@@ -8,17 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { useState } from "react";
-import { useAuth } from "@clerk/nextjs";
-import AddEditDialog from "./AddEditDialog";
 
 interface Props {
   recipe: Recipe;
 }
 
 const RecipeCard = ({ recipe }: Props) => {
-  const { userId } = useAuth();
-  const [showEditDialog, setShowEditDialog] = useState(false);
+  // const [showEditDialog, setShowEditDialog] = useState(false);
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
@@ -28,7 +24,7 @@ const RecipeCard = ({ recipe }: Props) => {
     <>
       <Card
         className="cursor-pointer transition-shadow hover:shadow-lg"
-        onClick={() => setShowEditDialog(true)}
+        // onClick={() => setShowEditDialog(true)}
       >
         <CardHeader>
           <CardTitle>{recipe.title}</CardTitle>
@@ -38,15 +34,14 @@ const RecipeCard = ({ recipe }: Props) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="whitespace-pre-line">{recipe.content}</p>
+          <p className="whitespace-pre-line">{recipe.instructions}</p>
         </CardContent>
       </Card>
-      {/* userId === recipe.userId &&  */}
-      <AddEditDialog
+      {/* <AddEditDialog
         open={showEditDialog}
         setOpen={setShowEditDialog}
         recipeToEdit={recipe}
-      />
+      /> */}
     </>
   );
 };
