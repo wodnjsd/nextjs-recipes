@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { title, instructions } = parseResult.data;
+    const { title, ingredients, instructions, tags } = parseResult.data;
 
     const { userId } = auth();
     const user = await currentUser()
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     //generate embedding
-    const embedding = await getEmbeddingForRecipe(title, instructions);
+    const embedding = await getEmbeddingForRecipe(title, ingredients, instructions, tags);
 
     //* wrapping mongodb and pinecone operations in prisma transaction
     //* can do multiple database operations and will only be applied if they all succeed
@@ -44,7 +44,9 @@ export async function POST(req: Request) {
       const recipe = await tx.recipe.create({
         data: {
           title,
+          ingredients, 
           instructions,
+          tags,
           userId,
           author
         },
@@ -81,7 +83,7 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { id, title, instructions } = parseResult.data;
+    const { id, title, ingredients, instructions, tags } = parseResult.data;
 
     //check recipe exists with the id
     const recipe = await prisma.recipe.findUnique({ where: { id } });
@@ -95,14 +97,16 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
-    const embedding = await getEmbeddingForRecipe(title, instructions);
+    const embedding = await getEmbeddingForRecipe(title, ingredients, instructions, tags);
 
     const updatedRecipe = await prisma.$transaction(async (tx) => {
       const updatedRecipe = await tx.recipe.update({
         where: { id },
         data: {
           title,
+          ingredients,
           instructions,
+          tags
         },
       });
       await recipesIndex.upsert([
@@ -160,7 +164,7 @@ export async function DELETE(req: Request) {
   }
 }
 
-async function getEmbeddingForRecipe(title: string, instructions: string) {
+async function getEmbeddingForRecipe(title: string, ingredients: string, instructions: string, tags: string) {
   //from openai file
-  return getEmbedding(title + "\n\n" + instructions);
+  return getEmbedding(title + "\n\n" + ingredients+ "\n\n" + instructions + "\n\n" + tags);
 }

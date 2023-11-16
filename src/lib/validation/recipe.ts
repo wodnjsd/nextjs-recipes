@@ -5,8 +5,9 @@ import { z } from "zod";
 export const createRecipeSchema = z.object({
   //*title is string and has at least 1 character, customised error message
   title: z.string().min(1, { message: "Title is required" }),
+  ingredients: z.string().min(1, {message: "Need some ingredients!"}),
   instructions: z.string().min(1, { message: "Add some content" }),
-  cuisine: z.string().array(),
+  tags: z.string(),
 });
 
 //*can use this for type safety on form later
@@ -18,5 +19,9 @@ export const updateRecipeSchema = createRecipeSchema.extend({
 });
 
 export const deleteRecipeSchema = z.object({
+  id: z.string().min(1),
+});
+
+export const likeRecipeSchema = z.object({
   id: z.string().min(1),
 });

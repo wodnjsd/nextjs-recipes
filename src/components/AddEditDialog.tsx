@@ -40,14 +40,15 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
     // add default values so they are not undefined, and correct error messages will appear
     defaultValues: {
       title: recipeToEdit?.title || "",
+      ingredients: recipeToEdit?.ingredients || "",
       instructions: recipeToEdit?.instructions || "",
-      cuisine: [],
+      tags: recipeToEdit?.tags || "#yummy",
     },
   });
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
-    //update
+    // Update
     try {
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
@@ -61,7 +62,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         if (!response.ok) throw Error("Status code: " + response.status);
         toast({ description: "Recipe updated" });
       } else {
-        //create
+        // Create
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },
           method: "POST",
@@ -74,7 +75,6 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
       }
       //refresh server component
       router.refresh();
-
       //close dialog
       setOpen(false);
     } catch (err) {
@@ -85,8 +85,8 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   };
 
   return (
-    //Using Shadcn form components  which uses react-hook-form under the hood
-    // Make sure to import from the /ui folder which are the shadcn components
+    //Using Shadcn form components which uses react-hook-form under the hood
+    // Make sure to import from the /ui folder which are the shadcn components not radix
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
@@ -96,6 +96,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            {/* Recipe title */}
             <FormField
               control={form.control}
               name="title"
@@ -110,6 +111,21 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                 </FormItem>
               )}
             />
+            {/* Recipe ingredients */}
+            <FormField
+              control={form.control}
+              name="ingredients"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Recipe ingredients</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Recipe ingredients" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Recipe instructions */}
             <FormField
               control={form.control}
               name="instructions"
@@ -123,6 +139,21 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                 </FormItem>
               )}
             />
+            {/* Recipe tags */}
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tags</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Tags" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Submit button */}
             <DialogFooter className="gap-1">
               {/* <Button type="submit">SUbmit</Button> */}
               <LoadingButton

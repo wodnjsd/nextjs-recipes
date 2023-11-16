@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// any changes to database - npx prisma db push 
 
 generator client {
   provider = "prisma-client-js"
@@ -13,14 +14,15 @@ datasource db {
 model Recipe {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
+  ingredients  String
   instructions String
-  cuisine      String?
   comments     Comment[]
+  tags         String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   userId       String
   author       String
-  likes        Int?
+  likes        Like[]
 
   //*convention that collection in MongoDB has name that is lower case and plural
   @@map("recipes")
@@ -31,6 +33,13 @@ model Recipe {
 //   email String
 //   recipes Recipe[]
 // }
+
+model Like {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String
+  recipeId String @db.ObjectId
+  Recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

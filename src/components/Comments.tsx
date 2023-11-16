@@ -21,12 +21,12 @@ const Comments = ({ comments, recipeId }: Props) => {
         }),
       });
       if (!response.ok) throw Error("Status code: " + response.status);
+      toast({ variant: "destructive", description: "Comment deleted" });
       router.refresh();
     } catch (err) {
       console.log(err);
       alert("something went wrong");
     }
-    toast({ variant: "destructive", description: "Comment deleted" });
   };
 
   return (
