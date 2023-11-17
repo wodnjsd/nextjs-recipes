@@ -48,8 +48,9 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
-    // Update
+
     try {
+      // Update
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },

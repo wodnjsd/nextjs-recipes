@@ -19,7 +19,7 @@ import DeleteConfirm from "./DeleteConfirm";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useToast } from "./ui/use-toast";
 import { Heart } from "lucide-react";
-import { Herr_Von_Muellerhoff } from "next/font/google";
+import SignInReminder from "./SignInReminder";
 // import { revalidateTag } from "next/cache";
 
 type Props = {
@@ -32,7 +32,9 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
   //!this is wrong - will show the current user not the creator?
   const { userId } = useAuth();
   const [comment, setComment] = useState("");
-  const [showDialog, setShowDialog] = useState(false);
+  const [showAddEditDialog, setShowAddEditDialog] = useState(false);
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
+  const userLiked = likes.find((like) => like.userId === userId);
   const router = useRouter();
   const { toast } = useToast();
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
@@ -68,7 +70,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
 
   //*Adding likes
   const onLike = async () => {
-    console.log('here')
+    console.log("here");
     try {
       const response = await fetch(`/api/recipes/${recipe.id}`, {
         method: "PUT",
@@ -85,15 +87,17 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
 
   return (
     <>
-      <Card className="mx-20 flex flex-col gap-8 px-20 py-8">
+      <Card className="mx-5 flex flex-col gap-8 px-3 py-8 sm:mx-20 md:px-24">
         <CardHeader>
-          <div className="fixed self-end">
-            <button type="button" onClick={onLike}>
-              <Heart className="hover:scale-125" />
+          <div className="absolute self-end">
+            <button type="button"  onClick={!userId ? () => setShowSignInDialog(true) : onLike}>
+              <Heart
+                className={`hover:scale-110 ${
+                  userLiked && "fill-current text-red-400"
+                }`}
+              />
             </button>
-            <span className="text-xs">{likes.length}</span>
           </div>
-
           <CardTitle className="pb-5">{recipe.title}</CardTitle>
           <CardDescription>
             {createdUpdatedAtTimestamp}
@@ -117,23 +121,25 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
             <h2 className="text-lg">Instructions:</h2>
             <ul>
               {splitInstructions.map((instruction, index) => (
-                <li key={index} className="list-disc">
+                <li key={index} className="list-decimal">
                   {instruction}
                 </li>
               ))}
             </ul>
           </div>
+          {/* Show tags */}
           <div className="text-sm">
-            <h2>Tags:</h2>
+            <h2 className="py-2">Tags:</h2>
             <p>
               {splitTags.map((tag, index) => (
-                <span key={index} className="rounded-full border p-2">
+                <span key={index} className="rounded-full border px-2 py-1">
                   {tag.startsWith("#") ? tag : `#${tag}`}
                 </span>
               ))}
             </p>
           </div>
-          <div>
+          {/* Show and add comments */}
+          <div className="flex flex-col gap-2">
             <h3>Comments:</h3>
             <form>
               <Textarea
@@ -144,9 +150,9 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
               />
               <button
                 type="button"
-                onClick={onSubmit}
+                onClick={!userId ? () => setShowSignInDialog(true) : onSubmit}
                 disabled={!comment}
-                className="rounded-lg border p-1 text-sm"
+                className="mt-2 rounded-full border bg-stone-300 px-2 py-1 text-sm hover:scale-105"
               >
                 Comment
               </button>
@@ -157,17 +163,12 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         {/* //* Edit and delete only available if you're the recipe creator  */}
         {userId === recipe.userId && (
           <CardFooter className="flex gap-3">
-            <Button variant="outline" onClick={() => setShowDialog(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowAddEditDialog(true)}
+            >
               Edit
             </Button>
-            {/* <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">Delete recipe</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <DeleteConfirm recipeId={recipe.id}/>
-              </AlertDialogContent>
-            </AlertDialog> */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="destructive">Delete recipe</Button>
@@ -180,10 +181,12 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         )}
       </Card>
       <AddEditDialog
-        open={showDialog}
-        setOpen={setShowDialog}
+        open={showAddEditDialog}
+        setOpen={setShowAddEditDialog}
         recipeToEdit={recipe}
       />
+
+      <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog}/>
     </>
   );
 };

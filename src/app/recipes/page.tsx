@@ -9,13 +9,17 @@ export const metadata: Metadata = {
 
 export default async function RecipesPage() {
   
-  const allRecipes = await prisma.recipe.findMany();
+  const allRecipes = await prisma.recipe.findMany({
+    include: {
+      likes: true
+    }
+  });
 
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {allRecipes.map((recipe) => (
         <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
-          <RecipeCard recipe={recipe} />
+          <RecipeCard recipe={recipe} likes={recipe.likes}/>
         </Link>
       ))}
       {allRecipes.length === 0 && (

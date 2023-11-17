@@ -1,9 +1,10 @@
 "use client";
 
 import AddRecipe from "@/components/AddEditDialog";
+import SignInReminder from "@/components/SignInReminder";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
-import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { useAuth, UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -13,7 +14,9 @@ import AIChatButton from "@/components/AIChatButton";
 
 const NavBar = () => {
   const { theme } = useTheme();
-  const [showDialog, setShowDialog] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
+  const {userId} = useAuth()
 
   return (
     <>
@@ -44,7 +47,7 @@ const NavBar = () => {
               </SignInButton>
             </SignedOut>
 
-            <Button onClick={() => setShowDialog(true)}>
+            <Button onClick={!userId ? () => setShowSignInDialog(true) :() => setShowAddDialog(true)}>
               <Plus size={20} className="mr-2" />
               Add Recipe
             </Button>
@@ -52,7 +55,8 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      <AddRecipe open={showDialog} setOpen={setShowDialog} />
+      <AddRecipe open={showAddDialog} setOpen={setShowAddDialog} />
+      <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog}/>
     </>
   );
 };
