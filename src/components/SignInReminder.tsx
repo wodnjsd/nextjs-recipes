@@ -16,10 +16,6 @@ interface Props {
 
 const SignInReminder = ({ open, setOpen }: Props) => {
 
-    // const close = () => {
-    //     open = false 
-    // }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -27,13 +23,11 @@ const SignInReminder = ({ open, setOpen }: Props) => {
           <DialogTitle>Please sign in first!</DialogTitle>
         </DialogHeader>
         <Button>
-          {" "}
           <Link href="/sign-in">Sign in </Link>
         </Button>
         <DialogClose asChild>
           <Button>Cancel</Button>
         </DialogClose>
-
         <DialogFooter className="whitespace-pre text-sm">
           Sign up{" "}
           <Link href="/sign-up" className="underline underline-offset-4">

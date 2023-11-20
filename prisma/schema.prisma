@@ -14,15 +14,16 @@ datasource db {
 model Recipe {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
-  ingredients  String
+  ingredients  String[]
   instructions String
   comments     Comment[]
-  tags         String
+  tags         String[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   userId       String
   author       String
   likes        Like[]
+
 
   //*convention that collection in MongoDB has name that is lower case and plural
   @@map("recipes")

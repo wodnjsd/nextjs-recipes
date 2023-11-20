@@ -41,13 +41,13 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
   ).toDateString();
-  const splitIngredients = recipe.ingredients
-    .split("\n")
-    .filter((ingredient) => ingredient.trim() !== "");
+  // const splitIngredients = recipe.ingredients
+  //   .split("\n")
+  //   .filter((ingredient) => ingredient.trim() !== "");
   const splitInstructions = recipe.instructions
     .split("\n")
     .filter((instruction) => instruction.trim() !== "");
-  const splitTags = recipe.tags.split(/\s+/).filter((tag) => tag.trim() !== "");
+  // const splitTags = recipe.tags.split(/\s+/).filter((tag) => tag.trim() !== "");
 
   //* Adding comments
   const onSubmit = async () => {
@@ -90,7 +90,10 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
       <Card className="mx-5 flex flex-col gap-8 px-3 py-8 sm:mx-20 md:px-24">
         <CardHeader>
           <div className="absolute self-end">
-            <button type="button"  onClick={!userId ? () => setShowSignInDialog(true) : onLike}>
+            <button
+              type="button"
+              onClick={!userId ? () => setShowSignInDialog(true) : onLike}
+            >
               <Heart
                 className={`hover:scale-110 ${
                   userLiked && "fill-current text-red-400"
@@ -110,7 +113,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
           <div>
             <h2 className="text-lg">Ingredients:</h2>
             <ul>
-              {splitIngredients.map((ingredient, index) => (
+              {recipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="list-disc">
                   {ingredient}
                 </li>
@@ -131,7 +134,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
           <div className="text-sm">
             <h2 className="py-2">Tags:</h2>
             <p>
-              {splitTags.map((tag, index) => (
+              {recipe.tags.map((tag, index) => (
                 <span key={index} className="rounded-full border px-2 py-1">
                   {tag.startsWith("#") ? tag : `#${tag}`}
                 </span>
@@ -186,7 +189,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         recipeToEdit={recipe}
       />
 
-      <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog}/>
+      <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />
     </>
   );
 };

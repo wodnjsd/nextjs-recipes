@@ -35,21 +35,26 @@ interface Props {
 const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   const router = useRouter();
   const { toast } = useToast();
+
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
-    // add default values so they are not undefined, and correct error messages will appear
+    // adding default values so they are not undefined, and correct error messages will appear
     defaultValues: {
       title: recipeToEdit?.title || "",
-      ingredients: recipeToEdit?.ingredients || "",
+      ingredients: recipeToEdit?.ingredients.join(" ") || "",
       instructions: recipeToEdit?.instructions || "",
-      tags: recipeToEdit?.tags || "#yummy",
+      tags: recipeToEdit?.tags.join(" ") || "#yummy",
     },
   });
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
-
     try {
+      const ingredientsArray = input.ingredients
+        .split("/\r?\n/")
+        .filter(Boolean);
+      const tagsArray = input.tags.split(/[\s#\r\n]+/).filter(Boolean);
+
       // Update
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
