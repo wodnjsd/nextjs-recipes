@@ -1,7 +1,7 @@
+
 import RecipeCard from "./RecipeCard";
 import Link from "next/link";
 import prisma from "@/lib/db/prisma";
-
 // interface MyRecipe extends Recipe {
 //   likes: Like[];
 // }
@@ -16,7 +16,10 @@ interface Props {
 }
 
 const RecipesIndex = async ({ query }: Props) => {
+
+
   let allRecipes;
+  //Searching by tags
   if (query === "") {
     allRecipes = await prisma.recipe.findMany({
       include: {
@@ -35,16 +38,17 @@ const RecipesIndex = async ({ query }: Props) => {
       },
     });
   }
-  //   const allRecipes = await prisma.recipe.findMany({
-  //     where: {
-  //         tags: {
-  //             has: `${query}`,
-  //         },
-  //     },
-  //     include: {
-  //       likes: true,
-  //     },
-  //   });
+
+//   const myRecipes = await prisma.recipe.findMany({
+//     where: {
+//       userId: {
+//         equals: `${userId}`,
+//       },
+//     },
+//     include: {
+//       likes: true,
+//     },
+//   });
 
   return (
     <div>

@@ -17,7 +17,6 @@ interface Props {
 }
 
 const RecipeCard = ({ recipe, likes }: Props) => {
-  // const [showEditDialog, setShowEditDialog] = useState(false);
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
@@ -27,13 +26,13 @@ const RecipeCard = ({ recipe, likes }: Props) => {
     <>
       <Card
         className="cursor-pointer transition-shadow hover:shadow-lg"
-        // onClick={() => setShowEditDialog(true)}
       >
         <CardHeader>
           <CardTitle>{recipe.title}</CardTitle>
           <CardDescription>
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
+            <p>By: {recipe.author}</p>
           </CardDescription>
         </CardHeader>
         {/* //! Only show some instructions */}
@@ -42,14 +41,9 @@ const RecipeCard = ({ recipe, likes }: Props) => {
         </CardContent>
         <CardFooter>
           <Heart strokeWidth="1"/>
-          {likes.length}
+          <span className="text-xs">{likes.length}</span>
         </CardFooter>
       </Card>
-      {/* <AddEditDialog
-        open={showEditDialog}
-        setOpen={setShowEditDialog}
-        recipeToEdit={recipe}
-      /> */}
     </>
   );
 };

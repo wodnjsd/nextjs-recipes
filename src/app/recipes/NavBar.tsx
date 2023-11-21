@@ -5,7 +5,6 @@ import SignInReminder from "@/components/SignInReminder";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
 import {
-  useAuth,
   UserButton,
   SignedIn,
   SignedOut,
@@ -45,7 +44,7 @@ const NavBar = () => {
                   },
                 }}
               />
-              <Button onClick={() => setShowAddDialog(true)}>
+              <Button type="button" onClick={() => setShowAddDialog(true)}>
                 <Plus size={20} className="mr-2" />
                 Add Recipe
               </Button>

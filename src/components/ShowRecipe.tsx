@@ -111,8 +111,8 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         </CardHeader>
         <CardContent className="flex flex-col gap-12">
           <div>
-            <h2 className="text-lg">Ingredients:</h2>
-            <ul>
+            <h2 className="text-lg py-1 font-semibold">Ingredients:</h2>
+            <ul className="translate-x-3">
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="list-disc">
                   {ingredient}
@@ -121,8 +121,8 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
             </ul>
           </div>
           <div>
-            <h2 className="text-lg">Instructions:</h2>
-            <ul>
+            <h2 className="text-lg py-1 font-semibold">Instructions:</h2>
+            <ul className="translate-x-4">
               {splitInstructions.map((instruction, index) => (
                 <li key={index} className="list-decimal">
                   {instruction}
@@ -155,7 +155,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
                 type="button"
                 onClick={!userId ? () => setShowSignInDialog(true) : onSubmit}
                 disabled={!comment}
-                className="mt-2 rounded-full border bg-stone-300 px-2 py-1 text-sm hover:scale-105"
+                className="mt-2 hover:bg-secondary bg-secondary/70 rounded-full border px-2 py-1 text-sm  float-right"
               >
                 Comment
               </button>

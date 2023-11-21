@@ -30,22 +30,25 @@ const Comments = ({ comments, recipeId }: Props) => {
   };
 
   return (
-    <div>
+    <>
       {comments.map((comment) => (
-        <div key={comment.id}>
-          <p className="text-sm">{comment.content}</p>
+        <div key={comment.id} className="flex justify-between py-5 border-t border-secondary">
+          <div>
+            <p className="text-sm">{comment.content}</p>
+            <span className="text-xs">{comment.author}</span>
+          </div>
+
           {/* add hover transformation */}
           <button
             type="button"
-            className="p-1"
+            className="p-1 hover:scale-105"
             onClick={() => onDelete(comment.id)}
           >
             <Delete size={18} strokeWidth={1} />
           </button>
-          <span className="text-xs">{comment.author}</span>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

@@ -50,10 +50,10 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
     try {
-      const ingredientsArray = input.ingredients
-        .split("/\r?\n/")
-        .filter(Boolean);
-      const tagsArray = input.tags.split(/[\s#\r\n]+/).filter(Boolean);
+      // const ingredientsArray = input.ingredients
+      //   .split("/\r?\n/")
+      //   .filter(Boolean);
+      // const tagsArray = input.tags.split(/[\s#\r\n]+/).filter(Boolean);
 
       // Update
       if (recipeToEdit) {
