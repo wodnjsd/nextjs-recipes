@@ -73,7 +73,10 @@ module.exports = {
       listStyleType: {
         square: 'square',
         circle: 'circle'
-      }
+      },
+      fontFamily: {
+        playfair: ['var(--font-playfair)']
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

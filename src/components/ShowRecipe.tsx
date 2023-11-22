@@ -18,7 +18,7 @@ import AddEditDialog from "./AddEditDialog";
 import DeleteConfirm from "./DeleteConfirm";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useToast } from "./ui/use-toast";
-import { Heart } from "lucide-react";
+import { Heart, MessageSquare } from "lucide-react";
 import SignInReminder from "./SignInReminder";
 // import { revalidateTag } from "next/cache";
 
@@ -87,7 +87,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
 
   return (
     <>
-      <Card className="mx-5 flex flex-col gap-8 px-3 py-8 sm:mx-20 md:px-24">
+      <Card className="lg:w-1/2 max-w-5xl my-8 flex flex-col gap-8 px-1 py-5 md:px-16 md:py-12 ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -111,7 +111,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         </CardHeader>
         <CardContent className="flex flex-col gap-12">
           <div>
-            <h2 className="text-lg py-1 font-semibold">Ingredients:</h2>
+            <h2 className="py-1 text-lg font-semibold">Ingredients:</h2>
             <ul className="translate-x-3">
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="list-disc">
@@ -121,7 +121,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
             </ul>
           </div>
           <div>
-            <h2 className="text-lg py-1 font-semibold">Instructions:</h2>
+            <h2 className="py-1 text-lg font-semibold">Instructions:</h2>
             <ul className="translate-x-4">
               {splitInstructions.map((instruction, index) => (
                 <li key={index} className="list-decimal">
@@ -143,7 +143,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
           </div>
           {/* Show and add comments */}
           <div className="flex flex-col gap-2">
-            <h3>Comments:</h3>
+            <h3 className="flex gap-2">Comments:<MessageSquare className="scale-75" strokeWidth={1}/></h3>
             <form>
               <Textarea
                 placeholder="Add a comment"
@@ -155,7 +155,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
                 type="button"
                 onClick={!userId ? () => setShowSignInDialog(true) : onSubmit}
                 disabled={!comment}
-                className="mt-2 hover:bg-secondary bg-secondary/70 rounded-full border px-2 py-1 text-sm  float-right"
+                className="float-right my-2 rounded-full border bg-secondary/70 px-2 py-1 text-sm  hover:bg-secondary"
               >
                 Comment
               </button>

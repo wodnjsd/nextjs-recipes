@@ -41,8 +41,10 @@ export default async function RecipesPage({
   }
 
   return (
-    <>
-      <SearchBar />
+    <div className="w-full flex flex-col gap-8 lg:px-20">
+      <div className="self-end">
+        <SearchBar />
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allRecipes.map((recipe) => (
           <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
@@ -51,10 +53,10 @@ export default async function RecipesPage({
         ))}
         {allRecipes.length === 0 && (
           <div className="col-span-full text-center">
-            No recipes yet, please add some recipes!
+            No recipes yet, please add some recipes! 
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

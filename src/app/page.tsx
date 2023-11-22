@@ -7,7 +7,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-24">
       <div className="flex items-center gap-4">
         {/* <span>Logo</span> */}
-        <span className="tracking-light text-4xl font-extrabold">Spicify</span>
+        <span className="tracking-light text-4xl font-extrabold font-playfair">Spicify</span>
       </div>
       <p className="max-w-prose text-center">
         Your ultimate recipe app with AI integration, built with OpenAI,

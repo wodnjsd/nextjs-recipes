@@ -3,7 +3,7 @@ import prisma from "@/lib/db/prisma";
 import openai, { getEmbedding } from "@/lib/openai";
 import { auth } from "@clerk/nextjs";
 import { ChatCompletionMessage } from "openai/resources/index.mjs";
-import {OpenAIStream, StreamingTextResponse} from 'ai'
+import { OpenAIStream, StreamingTextResponse } from "ai";
 
 export async function POST(req: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const vectorQueryResponse = await recipesIndex.query({
       vector: embedding,
       // how many results we want to return:
-      //! change later 
+      //! change later
       topK: 1,
       // filter: {userId}
     });
@@ -34,6 +34,10 @@ export async function POST(req: Request) {
         id: {
           in: vectorQueryResponse.matches.map((match) => match.id),
         },
+      },
+      include: {
+        likes: true,
+        comments: true,
       },
     });
     console.log("Relevant recipes found: ", relevantRecipes);
@@ -46,20 +50,20 @@ export async function POST(req: Request) {
         "The relevant recipes for this query are:\n " +
         relevantRecipes
           .map(
-            (recipe) => `Title: ${recipe.title}\n\nInstructions:\n${recipe.instructions}`,
+            (recipe) =>
+              `Title: ${recipe.title}\n\nInstructions:\n${recipe.instructions}\n\nIngredients:\n${recipe.ingredients}\n\nTags:\n${recipe.tags}\n\nLikes:\n${recipe.likes}\n\nComments:\n${recipe.comments}\n\nAuthor:\n${recipe.author}`,
           )
           .join("\n\n"),
     };
 
     //* requesting to chatGPT
     const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        stream: true,
-        messages: [systemMessage, ...messagesTruncated]
-    })
-    const stream = OpenAIStream(response)
-    return new StreamingTextResponse(stream)
-
+      model: "gpt-3.5-turbo",
+      stream: true,
+      messages: [systemMessage, ...messagesTruncated],
+    });
+    const stream = OpenAIStream(response);
+    return new StreamingTextResponse(stream);
   } catch (err) {
     console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });

@@ -25,18 +25,18 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <Input
         type="text"
         //   value={query}
         placeholder="Search..."
-        className="w-80"
+        className="w-60 sm:w-80 translate-x-6"
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query")?.toString()}
       />
-      <button type="submit" onClick={() => handleSearch}>
-        <Search className="-translate-x-8 scale-75 text-slate-500" />
-      </button>
+      {/* <button type="submit" onClick={() => handleSearch}> */}
+        <Search className="-translate-x-3 translate-y-2 scale-75 text-slate-500" />
+      {/* </button> */}
     </div>
   );
 };

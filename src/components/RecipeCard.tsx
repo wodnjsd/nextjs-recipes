@@ -40,7 +40,7 @@ const RecipeCard = ({ recipe, likes }: Props) => {
           <p className="whitespace-pre-line">{recipe.instructions}</p>
         </CardContent>
         <CardFooter>
-          <Heart strokeWidth="1"/>
+          <Heart strokeWidth="1" className="scale-75"/>
           <span className="text-xs">{likes.length}</span>
         </CardFooter>
       </Card>

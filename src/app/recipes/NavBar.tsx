@@ -4,12 +4,7 @@ import AddRecipe from "@/components/AddEditDialog";
 import SignInReminder from "@/components/SignInReminder";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
-import {
-  UserButton,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-} from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -22,14 +17,15 @@ const NavBar = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   // const [showSignInDialog, setShowSignInDialog] = useState(false);
 
-
   return (
     <>
-      <div className="p-4 shadow">
-        <div className="flex max-w-7xl flex-wrap items-center justify-between gap-3">
+      <div className="w-screen max-w-screen-2xl px-8 py-12 shadow">
+        <div className=" flex flex-wrap items-center justify-between gap-3">
           <Link href="/recipes" className="flex items-center gap-1">
-            <span>Logo</span>
-            <span className="font-bold">Spicify</span>
+            {/* <span>Logo</span> */}
+            <span className="font-playfair text-4xl font-extrabold tracking-wide">
+              Spicify
+            </span>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeToggleButton />
@@ -55,17 +51,6 @@ const NavBar = () => {
                 <Button>Sign In</Button>
               </SignInButton>
             </SignedOut>
-
-            {/* <Button
-              onClick={
-                !userId
-                  ? () => setShowSignInDialog(true)
-                  : () => setShowAddDialog(true)
-              }
-            >
-              <Plus size={20} className="mr-2" />
-              Add Recipe
-            </Button> */}
             <AIChatButton />
           </div>
         </div>
