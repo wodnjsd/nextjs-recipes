@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       //giving instructions to chatGPT
       role: "system",
       content:
-        "You are an intelligent recipe app. You answer the user's questions based on the existing recipes. " +
+        "You are an intelligent recipe app. Users create recipes on the app and you answer the user's questions based on those recipes on the app. " +
         "The relevant recipes for this query are:\n " +
         relevantRecipes
           .map(

@@ -1,6 +1,6 @@
 "use client";
 
-import { Recipe, Like } from "@prisma/client";
+import { Recipe, Like, User } from "@prisma/client";
 import {
   Card,
   CardContent,
@@ -14,9 +14,10 @@ import { Heart } from "lucide-react";
 interface Props {
   recipe: Recipe;
   likes: Like[];
+  author: User
 }
 
-const RecipeCard = ({ recipe, likes }: Props) => {
+const RecipeCard = ({ recipe, likes, author }: Props) => {
   const wasUpdated = recipe.updatedAt > recipe.createdAt;
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
@@ -32,7 +33,7 @@ const RecipeCard = ({ recipe, likes }: Props) => {
           <CardDescription>
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
-            <p>By: {recipe.author}</p>
+            <p>By: {author.username}</p>
           </CardDescription>
         </CardHeader>
         {/* //! Only show some instructions */}

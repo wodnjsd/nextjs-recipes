@@ -31,10 +31,10 @@ export async function POST(req: Request) {
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
 
     const { userId } = auth();
-    const user = await currentUser();
-    const author = user && user.username ? user.username : user?.firstName;
+    // const user = await currentUser();
+    // const author = user && user.username ? user.username : user?.firstName;
 
-    if (!userId || !author) {
+    if (!userId) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
@@ -57,8 +57,9 @@ export async function POST(req: Request) {
           ingredients: { set: ingredientsArray },
           instructions,
           tags: { set: tagsArray },
-          userId,
-          author,
+          author: {
+            connect: { externalId: userId },
+          },
         },
       });
       //creating entry in Pincone
@@ -82,7 +83,7 @@ export async function POST(req: Request) {
   }
 }
 
-//* UPDATE
+//* UPDATE RECIPE
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
@@ -118,14 +119,13 @@ export async function PUT(req: Request) {
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
 
     const updatedRecipe = await prisma.$transaction(async (tx) => {
-
       const updatedRecipe = await tx.recipe.update({
         where: { id },
         data: {
           title,
           ingredients: { set: ingredientsArray },
           instructions,
-          tags: {set: tagsArray},
+          tags: { set: tagsArray },
         },
       });
       await recipesIndex.upsert([
@@ -188,6 +188,8 @@ async function getEmbeddingForRecipe(
   ingredients: string,
   instructions: string,
   tags: string,
+  // comments: string[],
+  // likes: number
 ) {
   //from openai file
   return getEmbedding(

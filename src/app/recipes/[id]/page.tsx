@@ -8,12 +8,14 @@ const RecipePage = async ({ params }: { params: { id: string } }) => {
     },
     include: {
       comments: true,
-      likes: true
+      likes: true,
+      author: true,
+
     }
   });
   return (
     <>
-      <ShowRecipe  recipe={recipe} comments={recipe.comments} likes={recipe.likes}/>
+      <ShowRecipe recipe={recipe} comments={recipe.comments} likes={recipe.likes} author={recipe.author}/>
     </>
   );
 };

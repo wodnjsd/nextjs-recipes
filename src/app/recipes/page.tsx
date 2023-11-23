@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import prisma from "@/lib/db/prisma";
 import RecipeCard from "@/components/RecipeCard";
 import Link from "next/link";
-import SearchBar from "@/components/Search";
+import SearchBar from "@/components/SearchBar";
 // import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -25,6 +25,7 @@ export default async function RecipesPage({
     allRecipes = await prisma.recipe.findMany({
       include: {
         likes: true,
+        author: true
       },
     });
   } else {
@@ -36,6 +37,7 @@ export default async function RecipesPage({
       },
       include: {
         likes: true,
+        author: true
       },
     });
   }
@@ -48,7 +50,7 @@ export default async function RecipesPage({
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allRecipes.map((recipe) => (
           <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
-            <RecipeCard recipe={recipe} likes={recipe.likes} />
+            <RecipeCard recipe={recipe} likes={recipe.likes} author={recipe.author}/>
           </Link>
         ))}
         {allRecipes.length === 0 && (

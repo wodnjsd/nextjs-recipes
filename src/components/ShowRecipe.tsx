@@ -1,5 +1,5 @@
 "use client";
-import { Recipe, Comment, Like } from "@prisma/client";
+import { Recipe, Comment, Like, User } from "@prisma/client";
 import {
   Card,
   CardContent,
@@ -11,7 +11,6 @@ import {
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import Comments from "./Comments";
 import AddEditDialog from "./AddEditDialog";
@@ -26,12 +25,13 @@ type Props = {
   recipe: Recipe;
   comments: Comment[];
   likes: Like[];
+  author: User;
 };
 
-const ShowRecipe = ({ recipe, comments, likes }: Props) => {
+const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   //!this is wrong - will show the current user not the creator?
   const { userId } = useAuth();
-  const [comment, setComment] = useState("");
+  // const [comment, setComment] = useState("");
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const userLiked = likes.find((like) => like.userId === userId);
@@ -48,25 +48,6 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
     .split("\n")
     .filter((instruction) => instruction.trim() !== "");
   // const splitTags = recipe.tags.split(/\s+/).filter((tag) => tag.trim() !== "");
-
-  //* Adding comments
-  const onSubmit = async () => {
-    try {
-      const response = await fetch(`/api/comments/${recipe.id}`, {
-        method: "POST",
-        body: JSON.stringify({ content: comment }),
-      });
-      if (!response.ok) throw Error("Status code: " + response.status);
-      //!reset textarea
-      router.refresh();
-      setComment("");
-    } catch (err) {
-      console.log(err);
-      //!add toast later
-      alert("something went wrong");
-    }
-    toast({ description: "Comment added" });
-  };
 
   //*Adding likes
   const onLike = async () => {
@@ -87,7 +68,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
 
   return (
     <>
-      <Card className="lg:w-1/2 max-w-5xl my-8 flex flex-col gap-8 px-1 py-5 md:px-16 md:py-12 ">
+      <Card className="my-8 flex max-w-5xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12 lg:w-1/2 ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -106,7 +87,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <br />
-            Created by: {recipe.author}
+            Created by: {author.username}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-12">
@@ -142,26 +123,7 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
             </p>
           </div>
           {/* Show and add comments */}
-          <div className="flex flex-col gap-2">
-            <h3 className="flex gap-2">Comments:<MessageSquare className="scale-75" strokeWidth={1}/></h3>
-            <form>
-              <Textarea
-                placeholder="Add a comment"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                onClick={!userId ? () => setShowSignInDialog(true) : onSubmit}
-                disabled={!comment}
-                className="float-right my-2 rounded-full border bg-secondary/70 px-2 py-1 text-sm  hover:bg-secondary"
-              >
-                Comment
-              </button>
-            </form>
-            <Comments comments={comments} recipeId={recipe.id} />
-          </div>
+          <Comments comments={comments} recipeId={recipe.id} author={author} />
         </CardContent>
         {/* //* Edit and delete only available if you're the recipe creator  */}
         {userId === recipe.userId && (
@@ -188,8 +150,6 @@ const ShowRecipe = ({ recipe, comments, likes }: Props) => {
         setOpen={setShowAddEditDialog}
         recipeToEdit={recipe}
       />
-
-      <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />
     </>
   );
 };

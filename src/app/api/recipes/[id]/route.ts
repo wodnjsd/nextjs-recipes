@@ -1,9 +1,11 @@
 import prisma from "@/lib/db/prisma";
 import { likeRecipeSchema } from "@/lib/validation/recipe";
 import { auth } from "@clerk/nextjs";
-import { getEmbedding } from "@/lib/openai";
-import { recipesIndex } from "@/lib/db/pinecone";
+// import { getEmbedding } from "@/lib/openai";
+// import { recipesIndex } from "@/lib/db/pinecone";
 
+
+//* Liking, unliking recipe 
 export async function PUT(req: Request) {
   try {
     const body = await req.json();

@@ -7,9 +7,9 @@ import {
 import { NextRequest } from "next/server";
 // import { revalidatePath } from "next/cache";
 
-//! Will not be adding comments into embedding for now
 
-//* CREATE
+
+//* CREATE COMMENT
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -37,10 +37,7 @@ export async function POST(
       data: {
         content,
         userId,
-        Recipe: {
-          connect: { id: recipeId },
-        },
-        author
+        recipeId,
       },
     });
 
@@ -51,7 +48,7 @@ export async function POST(
   }
 }
 
-//* DELETE
+//* DELETE COMMENT
 export async function DELETE(req: Request) {
   try {
     const body = await req.json();
