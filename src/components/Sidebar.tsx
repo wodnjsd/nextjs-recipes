@@ -1,28 +1,31 @@
 import Link from "next/link";
-import { Home, Search, Heart, User, FilePlus2 } from "lucide-react";
+import { Home, Search, Heart, User, FilePlus2, FolderOpen } from "lucide-react";
 import { Button } from "./ui/button";
 
 const Sidebar = () => {
   return (
-    <section>
-      <div className="flex w-full flex-1 flex-col gap-6 px-6">
+    <div className=" h-screen border-r">
+      <div className="flex flex-col gap-10 px-8 pt-40 ">
         <Link href="/">
           <Home />
         </Link>
         <Link href="/">
           <Search />
         </Link>
-        <Link href="/">
+        <Link href="/dashboard/my-favourites">
           <Heart />
+        </Link>
+        <Link href="/dashboard/my-recipes">
+          <FolderOpen />
         </Link>
         <Link href="/">
           <FilePlus2 />
         </Link>
-        <Button>
+        <Link href="/dashboard/profile">
           <User />
-        </Button>
+        </Link>
       </div>
-    </section>
+    </div>
   );
 };
 

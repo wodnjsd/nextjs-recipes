@@ -20,7 +20,7 @@ model Recipe {
   tags         String[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  userId       String    
+  userId       String
   author       User      @relation(fields: [userId], references: [externalId])
   likes        Like[]
 
@@ -32,20 +32,21 @@ model User {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   externalId String    @unique
   name       String
-  username   String?    @unique
+  username   String?   @unique
   recipes    Recipe[]
   comments   Comment[]
-  Like       Like[]
+  likes      Like[]
 
   @@map("users")
 }
 
 model Like {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String 
-  user     User   @relation(fields: [userId], references: [externalId], onDelete: Cascade)
-  recipeId String @db.ObjectId
-  Recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  user      User     @relation(fields: [userId], references: [externalId], onDelete: Cascade)
+  recipeId  String   @db.ObjectId
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
   @@map("likes")
 }
@@ -53,7 +54,7 @@ model Like {
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-  userId    String   
+  userId    String
   author    User     @relation(fields: [userId], references: [externalId], onDelete: Cascade)
   createdAt DateTime @default(now())
   recipeId  String   @db.ObjectId

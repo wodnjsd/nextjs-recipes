@@ -2,14 +2,10 @@
 
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-// import { useState } from "react";
-// import { Button } from "./ui/button";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
 
 const SearchBar = () => {
-//   const { userId } = useAuth();
-//   const [user, setUser] = useState("");
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -25,7 +21,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex">
       <Input
         type="text"
         //   value={query}

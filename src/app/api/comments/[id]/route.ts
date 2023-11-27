@@ -8,7 +8,6 @@ import { NextRequest } from "next/server";
 // import { revalidatePath } from "next/cache";
 
 
-
 //* CREATE COMMENT
 export async function POST(
   req: NextRequest,

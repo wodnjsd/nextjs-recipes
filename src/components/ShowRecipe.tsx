@@ -17,7 +17,7 @@ import AddEditDialog from "./AddEditDialog";
 import DeleteConfirm from "./DeleteConfirm";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useToast } from "./ui/use-toast";
-import { Heart, MessageSquare } from "lucide-react";
+import { Heart } from "lucide-react";
 import SignInReminder from "./SignInReminder";
 // import { revalidateTag } from "next/cache";
 
@@ -49,7 +49,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
     .filter((instruction) => instruction.trim() !== "");
   // const splitTags = recipe.tags.split(/\s+/).filter((tag) => tag.trim() !== "");
 
-  //*Adding likes
+  //* Adding likes
   const onLike = async () => {
     console.log("here");
     try {
@@ -68,13 +68,14 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   return (
     <>
-      <Card className="my-8 flex max-w-5xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12 lg:w-1/2 ">
+      <Card className="w-4/5 my-8 flex max-w-5xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12 lg:w-1/2 ">
         <CardHeader>
           <div className="absolute self-end">
             <button
               type="button"
               onClick={!userId ? () => setShowSignInDialog(true) : onLike}
             >
+              {/* //* Heart button to like/ unlike recipe */}
               <Heart
                 className={`hover:scale-110 ${
                   userLiked && "fill-current text-red-400"
@@ -122,7 +123,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
               ))}
             </p>
           </div>
-          {/* Show and add comments */}
+          {/* //* Show and add comments */}
           <Comments comments={comments} recipeId={recipe.id} author={author} />
         </CardContent>
         {/* //* Edit and delete only available if you're the recipe creator  */}
