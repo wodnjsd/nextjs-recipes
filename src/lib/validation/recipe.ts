@@ -10,6 +10,7 @@ export const createRecipeSchema = z.object({
   instructions: z.string().min(1, { message: "Add some content" }),
   // tags: z.string().array(),
   tags: z.string(),
+  image: z.string().optional()
 
 });
 

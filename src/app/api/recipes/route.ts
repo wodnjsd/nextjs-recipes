@@ -6,7 +6,7 @@ import {
   deleteRecipeSchema,
   updateRecipeSchema,
 } from "@/lib/validation/recipe";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 // import { revalidatePath, revalidateTag } from "next/cache";
 
 //* CREATE
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { title, ingredients, instructions, tags } = parseResult.data;
+    const { title, ingredients, instructions, tags, image } = parseResult.data;
 
     //split strings based on spaces (`\s`), hashtags, line breaks
     //filter Boolean removes any empty elements from the arrays
@@ -44,6 +44,7 @@ export async function POST(req: Request) {
       ingredients,
       instructions,
       tags,
+      image!,
     );
 
     //* wrapping mongodb and pinecone operations in prisma transaction
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
           ingredients: { set: ingredientsArray },
           instructions,
           tags: { set: tagsArray },
+          image,
           author: {
             connect: { externalId: userId },
           },
@@ -94,7 +96,7 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { id, title, ingredients, instructions, tags } = parseResult.data;
+    const { id, title, ingredients, instructions, tags, image } = parseResult.data;
 
     //check recipe exists with the id
     const recipe = await prisma.recipe.findUnique({ where: { id } });
@@ -113,6 +115,7 @@ export async function PUT(req: Request) {
       ingredients,
       instructions,
       tags,
+      image!,
     );
 
     const ingredientsArray = ingredients.split(/\r?\n/).filter(Boolean);
@@ -126,6 +129,7 @@ export async function PUT(req: Request) {
           ingredients: { set: ingredientsArray },
           instructions,
           tags: { set: tagsArray },
+          image,
         },
       });
       await recipesIndex.upsert([
@@ -188,11 +192,12 @@ async function getEmbeddingForRecipe(
   ingredients: string,
   instructions: string,
   tags: string,
+  image: string,
   // comments: string[],
   // likes: number
 ) {
   //from openai file
   return getEmbedding(
-    title + "\n\n" + ingredients + "\n\n" + instructions + "\n\n" + tags,
+    title + "\n\n" + ingredients + "\n\n" + instructions + "\n\n" + tags + "\n\n" + image
   );
 }

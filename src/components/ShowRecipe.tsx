@@ -19,6 +19,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useToast } from "./ui/use-toast";
 import { Heart } from "lucide-react";
 import SignInReminder from "./SignInReminder";
+import Image from "next/image";
 // import { revalidateTag } from "next/cache";
 
 type Props = {
@@ -123,6 +124,8 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
               ))}
             </p>
           </div>
+          {/* {recipe.image ? <Image src={recipe.image} alt={recipe.title} width={30} height={30}/> : <p>None</p>} */}
+{recipe.image && <img src={recipe.image}></img>}
           {/* //* Show and add comments */}
           <Comments comments={comments} recipeId={recipe.id} author={author} />
         </CardContent>

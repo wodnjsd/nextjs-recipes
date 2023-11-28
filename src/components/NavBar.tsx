@@ -11,6 +11,7 @@ import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 import AIChatButton from "@/components/AIChatButton";
 import Sidebar from "./Sidebar";
+import { CldUploadButton } from "next-cloudinary";
 
 const NavBar = () => {
   const { theme } = useTheme();
@@ -23,7 +24,7 @@ const NavBar = () => {
     <>
       <div className="w-screen max-w-screen-2xl px-8 py-4 shadow">
         <div className=" flex flex-wrap items-center justify-between gap-3">
-          <button onClick={toggleSidebar} className="lg:hidden z-40">
+          <button onClick={toggleSidebar} className="z-40 lg:hidden">
             <LayoutDashboard />
           </button>
           <Link href="/recipes" className="flex items-center gap-1">
@@ -34,6 +35,12 @@ const NavBar = () => {
             </span>
           </Link>
           <div className="flex items-center gap-2">
+            <CldUploadButton
+              uploadPreset="recipes"
+              options={{
+                sources: ["local", "url", "unsplash", "camera"],
+              }}
+            />
             <ThemeToggleButton />
             {/* Show User button and Add button if user is signed in */}
             <SignedIn>

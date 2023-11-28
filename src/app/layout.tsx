@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} ${playfair.variable}`} >
+        <body className={`${inter.className} ${playfair.variable} ` } >
           <ThemeProvider attribute="class">
             <main className="w-screen">
             {/* <Sidebar /> */}

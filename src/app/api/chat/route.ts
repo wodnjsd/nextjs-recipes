@@ -38,6 +38,7 @@ export async function POST(req: Request) {
       include: {
         likes: true,
         comments: true,
+        author: true
       },
     });
     console.log("Relevant recipes found: ", relevantRecipes);

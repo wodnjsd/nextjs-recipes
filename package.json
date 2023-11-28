@@ -11,6 +11,8 @@
   "dependencies": {
     "@clerk/nextjs": "^4.26.2",
     "@clerk/themes": "^1.7.9",
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.13.0",
     "@hookform/resolvers": "^3.3.2",
     "@pinecone-database/pinecone": "^1.1.2",
     "@prisma/client": "^5.5.2",
@@ -27,6 +29,7 @@
     "eslint-config-prettier": "^9.0.0",
     "lucide-react": "^0.292.0",
     "next": "14.0.1",
+    "next-cloudinary": "^5.7.0",
     "next-themes": "^0.2.1",
     "openai": "^4.14.2",
     "prettier": "^3.0.3",

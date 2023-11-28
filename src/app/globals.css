@@ -33,6 +33,11 @@
     --ring: 240 10% 3.9%;
  
     --radius: 0.5rem;
+
+  }
+
+  body {
+    pointer-events:   auto !important;
   }
  
   .dark {
@@ -71,6 +76,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground 
   }
 }

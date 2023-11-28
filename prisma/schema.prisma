@@ -23,6 +23,7 @@ model Recipe {
   userId       String
   author       User      @relation(fields: [userId], references: [externalId])
   likes        Like[]
+  image        String?
 
   //*convention that collection in MongoDB has name that is lower case and plural
   @@map("recipes")
