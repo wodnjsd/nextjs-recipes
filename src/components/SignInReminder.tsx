@@ -15,24 +15,26 @@ interface Props {
 }
 
 const SignInReminder = ({ open, setOpen }: Props) => {
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Please sign in first!</DialogTitle>
         </DialogHeader>
-        <Button>
-          <Link href="/sign-in">Sign in </Link>
-        </Button>
-        <DialogClose asChild>
-          <Button>Cancel</Button>
-        </DialogClose>
-        <DialogFooter className="whitespace-pre text-sm">
-          Sign up{" "}
+        <div className="flex flex-col items-center justify-center gap-2">
+          <Link href="/sign-in" className="w-4/5">
+            <Button className="w-full">Sign in </Button>
+          </Link>
+          <DialogClose asChild>
+            <Button className="w-4/5">Cancel</Button>
+          </DialogClose>
+        </div>
+
+        <DialogFooter className="flex flex-row items-center gap-2 whitespace-pre text-sm">
+          No account?
           <Link href="/sign-up" className="underline underline-offset-4">
-            here
-          </Link>{" "}
+            Sign up here
+          </Link>
         </DialogFooter>
       </DialogContent>
     </Dialog>

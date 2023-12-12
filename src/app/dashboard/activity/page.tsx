@@ -23,6 +23,7 @@ const ActivityPage = async () => {
 
   return (
     <>
+
       <UserActivity user={user} activities={allActivities} />
     </>
   );

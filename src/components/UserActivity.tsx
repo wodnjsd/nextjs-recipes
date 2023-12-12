@@ -9,26 +9,42 @@ import {
 
 type Props = {
   user: User;
-  activities:
-    (Recipe & {type:string} | Comment& {type:string}| Like & {type:string}) [] 
- 
+  activities: (
+    | (Recipe & { type: string })
+    | (Comment & { type: string })
+    | (Like & { type: string })
+  )[];
 };
 
 const UserActivity = ({ user, activities }: Props) => {
   return (
-    <Card className="w-full h-full">
-      <CardHeader>
+    <Card className="h-full w-full my-12">
+      <CardHeader className="py-10">
         <CardTitle>Your Activity - {user.username}</CardTitle>
       </CardHeader>
       <CardContent>
-       
         {activities.map((activity) => {
           if (activity.type === "recipe") {
-            return <h4 key={activity.id}>You created: {(activity as Recipe).title}</h4>;
+            return (
+              <p key={activity.id}>
+                <span>{activity.createdAt.toLocaleDateString()} - </span>You
+                created: {(activity as Recipe).title}
+              </p>
+            );
           } else if (activity.type === "comment") {
-            return <h4 key={activity.id}>You commented:{(activity as Comment).content}</h4>;
+            return (
+              <p key={activity.id}>
+                <span>{activity.createdAt.toLocaleDateString()} - </span>You
+                commented:{(activity as Comment).content}
+              </p>
+            );
           } else if (activity.type === "like") {
-            return <h4 key={activity.id}>You liked as {(activity as Like).recipeId}</h4>;
+            return (
+              <p key={activity.id}>
+                <span>{activity.createdAt.toLocaleDateString()} - </span>You liked
+                as {(activity as Like).recipeId}
+              </p>
+            );
           }
           return null;
         })}

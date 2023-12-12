@@ -25,39 +25,53 @@ export default async function RecipesPage({
     allRecipes = await prisma.recipe.findMany({
       include: {
         likes: true,
-        author: true
+        author: true,
       },
     });
   } else {
     allRecipes = await prisma.recipe.findMany({
       where: {
-        tags: {
-          has: `${query}`,
-        },
+        OR: [
+          {
+            tags: {
+              has: `${query}`,
+            },
+          },
+          { title: {
+            contains: query
+          }}
+        ]
+    
       },
       include: {
         likes: true,
-        author: true
+        author: true,
       },
     });
   }
 
   return (
-    <div className="w-full flex flex-col gap-8 lg:px-20">
+    <div className="flex w-full flex-col gap-8 ">
       <div className="self-end">
         <SearchBar />
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {allRecipes.map((recipe) => (
           <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>
-            <RecipeCard recipe={recipe} likes={recipe.likes} author={recipe.author}/>
+            <RecipeCard
+              recipe={recipe}
+              likes={recipe.likes}
+              author={recipe.author}
+            />
           </Link>
         ))}
-        {allRecipes.length === 0 && (
+        {allRecipes.length === 0 && ( query ? (
+          <div className="col-span-full text-center">None found!</div>
+        ) : (
           <div className="col-span-full text-center">
-            No recipes yet, please add some recipes! 
+            No recipes yet, please add some recipes!
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { useAuth } from "@clerk/nextjs";
+import { SignIn, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { useState } from "react";
@@ -32,7 +32,6 @@ type Props = {
 const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   //!this is wrong - will show the current user not the creator?
   const { userId } = useAuth();
-  // const [comment, setComment] = useState("");
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const userLiked = likes.find((like) => like.userId === userId);
@@ -42,13 +41,9 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
   ).toDateString();
-  // const splitIngredients = recipe.ingredients
-  //   .split("\n")
-  //   .filter((ingredient) => ingredient.trim() !== "");
   const splitInstructions = recipe.instructions
     .split("\n")
     .filter((instruction) => instruction.trim() !== "");
-  // const splitTags = recipe.tags.split(/\s+/).filter((tag) => tag.trim() !== "");
 
   //* Adding likes
   const onLike = async () => {
@@ -69,7 +64,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   return (
     <>
-      <Card className="w-4/5 my-8 flex max-w-5xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12 lg:w-1/2 ">
+      <Card className="my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -91,6 +86,11 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             <br />
             Created by: {author.username}
           </CardDescription>
+          {recipe.image && (
+      <div className="w-7/8 lg:w-4/5 pt-8">
+<img src={recipe.image} alt={recipe.title} className=" rounded-2xl"/>
+      </div>
+        )}
         </CardHeader>
         <CardContent className="flex flex-col gap-12">
           <div>
@@ -124,8 +124,6 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
               ))}
             </p>
           </div>
-          {/* {recipe.image ? <Image src={recipe.image} alt={recipe.title} width={30} height={30}/> : <p>None</p>} */}
-{recipe.image && <img src={recipe.image}></img>}
           {/* //* Show and add comments */}
           <Comments comments={comments} recipeId={recipe.id} author={author} />
         </CardContent>
@@ -154,6 +152,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
         setOpen={setShowAddEditDialog}
         recipeToEdit={recipe}
       />
+      { showSignInDialog && <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />}
     </>
   );
 };

@@ -11,12 +11,15 @@ const ProfilePage = () => {
 
   return (
     <>
-      <h2 className="py-4 text-3xl ">Profile</h2>
+      <h2 className="w-full mt-12 text-center text-2xl ">Profile</h2>
+      <section className="flex w-full flex-col py-4 mx-2 justify-center items-center">
       <UserProfile
         appearance={{
           baseTheme: theme === "dark" ? dark : undefined,
         }}
       />
+      </section>
+      
     </>
   );
 };

@@ -78,7 +78,7 @@ const Comments = ({ comments, recipeId, author }: Props) => {
               </button>
             </CollapsibleTrigger>
           </div>
-
+{/* <div className="border-t border-secondary ">{comments[0].content}</div> */}
           <CollapsibleContent>
             {comments.map((comment) => (
               <div

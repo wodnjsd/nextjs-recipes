@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       vector: embedding,
       // how many results we want to return:
       //! change later
-      topK: 1,
+      topK: 10,
       // filter: {userId}
     });
     //* we get ids of the recipes from pinecone then use the results to request to mongodb
@@ -47,7 +47,8 @@ export async function POST(req: Request) {
       //giving instructions to chatGPT
       role: "system",
       content:
-        "You are an intelligent recipe app. Users create recipes on the app and you answer the user's questions based on those recipes on the app. " +
+        `You are a helpful chatbot embedded in a recipe app where users can create, comment, and like recipes. You are able to answer questions about the app and its content.
+        You are also able to answer questions about the recipes in the app. ` +
         "The relevant recipes for this query are:\n " +
         relevantRecipes
           .map(

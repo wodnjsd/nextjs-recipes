@@ -25,12 +25,12 @@ import { useRouter } from "next/navigation";
 import { Recipe } from "@prisma/client";
 import { useToast } from "./ui/use-toast";
 import LoadingButton from "./LoadingButton";
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 import {
-  CldUploadWidget,
   CldUploadButton,
-  CldUploadWidgetResults,
 } from "next-cloudinary";
+
+import Image from "next/image";
 
 interface Props {
   open: boolean;
@@ -38,13 +38,17 @@ interface Props {
   recipeToEdit?: Recipe;
 }
 
+const presetImages = [
+  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219039/turkey-1460853_1280_tf3jz0.png",
+  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219038/spaghetti-7433732_1280_hoycqw.jpg",
+  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219047/eggplant-2924511_1280_orufwf.png",
+];
+
 const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   const router = useRouter();
   const { toast } = useToast();
   const [imgUrl, setImgUrl] = useState("");
   const [preview, setPreview] = useState("");
-  // const [result, setResult] = useState<object | string | undefined>();
-  // const [showImage, setShowImage] = useState(false);
 
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
@@ -57,13 +61,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
       image: recipeToEdit?.image || "",
     },
   });
-  const handleImage = () => {
-    // const file = e.target.files![0];
-    // const urlImage = URL.createObjectURL(file);
-    form.setValue("image", imgUrl);
-    console.log("handle image working");
-    // setPreview(urlImage);
-  };
+
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
     console.log(input);
@@ -91,10 +89,12 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         if (!response.ok) throw Error("Status code: " + response.status);
         //reset input fields if successful
         form.reset();
+        setPreview("");
+        setImgUrl("")
         toast({ description: "Recipe created!" });
       }
       //refresh server component
-      router.refresh();
+      router.push('/recipes');
       //close dialog
       setOpen(false);
     } catch (err) {
@@ -109,6 +109,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
     // Make sure to import from the /ui folder which are the shadcn components not radix
     <div className="relative">
       <Dialog open={open} onOpenChange={setOpen}>
+        <section className="my-4 py-4 h-5/6">
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
@@ -174,36 +175,56 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                   </FormItem>
                 )}
               />
-              <div className="z-50 active:pointer-events-auto">
-                <CldUploadButton
-                  className="pointer-events-auto"
-                  uploadPreset="recipes"
-                  onUpload={(result, widget) => {
-                    if (
-                      result &&
-                      result.event === "success" &&
-                      typeof result.info === "object" &&
-                      "secure_url" in result.info
-                    ) {
-                      const imageUrl = result.info.secure_url as string;
-                      setImgUrl(imageUrl);
-                      // console.log("ImgUrl", imageUrl);
-                      widget.close();
-                      form.setValue("image", imgUrl)
-                      // handleImage()
-                    }                
-                    // Updating local state with asset details
-                  
-                    // console.log("Hello", result.info); // Close widget immediately after successful upload
-                  }}
-                  options={{
-                    sources: ["local", "url", "unsplash", "camera"],
-                  }}
-                >
-                  Upload
-                </CldUploadButton>
-              </div>
+              <div className=" active:pointer-events-auto flex flex-col">
+                <FormLabel>Image</FormLabel>
+                {preview && <Image src={preview} alt="preview image" className=" my-2 border rounded-sm" width={60} height={60}/>}
 
+                  <CldUploadButton
+                    className="pointer-events-auto my-2 rounded-md border p-2 w-20"
+                    uploadPreset="recipes"
+                    onUpload={(result, widget) => {
+                      if (
+                        result &&
+                        result.event === "success" &&
+                        typeof result.info === "object" &&
+                        "secure_url" in result.info &&
+                        "thumbnail_url" in result.info
+                      ) {
+                        const imageUrl = result.info.secure_url as string;
+                        const preview = result.info.thumbnail_url as string;
+                        console.log(result.info);
+                        setImgUrl(imageUrl);
+                        setPreview(preview);
+                        form.setValue("image", imageUrl);
+                        // console.log(preview);
+                        // console.log("ImgUrl", imageUrl);
+                        // widget.close();
+                        // handleImage()
+                      }
+                    }}
+                    options={{
+                      sources: ["local", "url", "unsplash", "camera"],
+                    }}
+                  >
+                    <p className="text-sm">Upload</p>
+                   {/* {imgUrl && preview ? <p className="text-sm">Upload</p> : <p className="text-sm">Change</p>}  */}
+                  </CldUploadButton>
+              </div>
+              <div>
+                <FormLabel>Or choose an image:</FormLabel>
+                <div className="flex gap-5 ">
+                  {presetImages.map((img) => (
+                    <Image
+                      key={img}
+                      src={img}
+                      alt="image"
+                      onClick={() => {form.setValue("image", img); setPreview(img)}}
+                      width={80} height={60}
+                      className="cursor-pointer hover:scale-105"
+                    />
+                  ))}
+                </div>
+              </div>
               {/* Submit button */}
               <DialogFooter className="gap-1">
                 {/* <Button type="submit">SUbmit</Button> */}
@@ -218,6 +239,8 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
             </form>
           </Form>
         </DialogContent>
+        </section>
+       
       </Dialog>
     </div>
   );

@@ -32,7 +32,7 @@ const page = async () => {
   return (
     <>
       <h2 className="text-2xl py-10 flex gap-3">Your Favourites <Star size={28} fill="yellow"/></h2>
-      <div className="flex w-full flex-col gap-8">
+      <div className="flex w-full flex-col gap-8 ">
         {/* <div className="self-end">
         <SearchBar />
       </div> */}
@@ -48,7 +48,7 @@ const page = async () => {
           ))}
           {myFavourites.length === 0 && (
             <div className="col-span-full text-center">
-              You haven't liked any recipes yet! 
+              You haven`&apos;`t liked any recipes yet! 
             </div>
           )}
         </div>
