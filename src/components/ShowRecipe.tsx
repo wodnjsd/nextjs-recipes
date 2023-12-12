@@ -64,7 +64,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   return (
     <>
-      <Card className="my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
+      <Card className="bg-background/80 my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
         <CardHeader>
           <div className="absolute self-end">
             <button

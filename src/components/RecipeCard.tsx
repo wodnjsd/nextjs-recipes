@@ -37,12 +37,12 @@ const RecipeCard = ({ recipe, likes, author }: Props) => {
         )}
         <CardContent className="flex flex-col gap-2 justify-center z-10 group-hover:scale-105">
           <CardTitle  className=" text-slate-50">{recipe.title}</CardTitle>
-          <CardDescription className="text-slate-300">
+          <CardDescription className="text-slate-200">
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <p>By: {author.username}</p>
           </CardDescription>
-          <div>{recipe.tags.map((tag) => <span key={tag} className="text-xs px-1 ">#{tag}</span>)}</div>
+          <div>{recipe.tags.map((tag) => <span key={tag} className="text-xs px-1 text-slate-300">#{tag}</span>)}</div>
         </CardContent>
         <CardFooter className="group-hover:scale-105 text-slate-100 z-10">
           <Heart strokeWidth="1" className="scale-75" />

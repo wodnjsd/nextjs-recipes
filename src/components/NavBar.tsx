@@ -72,12 +72,12 @@ const NavBar = () => {
         <aside
           className={`fixed inset-0 block h-screen w-screen bg-background/80 backdrop-blur-sm lg:hidden  `}
         >
-          <section className="fixed inset-0 w-24 block h-full  ">
+          <section className="fixed inset-0 w-24 block h-full bg-background ">
             <Sidebar setShowSidebar={setShowSidebar} />
           </section>
         </aside>
       )}
-      <section className="fixed inset-0 hidden w-24 h-full lg:block ">
+      <section className="fixed inset-0 hidden w-24 bg-background h-full lg:block ">
         <Sidebar setShowSidebar={setShowSidebar} />
       </section>
     </>
