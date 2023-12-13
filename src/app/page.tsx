@@ -10,8 +10,7 @@ export default function Home() {
         Spicify
       </span>
       <p className="max-w-prose text-center ">
-        Your ultimate recipe app built with OpenAI,
-        Pinecone, Next.js, Shadcn UI, Clerk, and more.
+        Your ultimate recipe app built with Next.js, Shadcn UI, Clerk, and more.
         Start adding and sharing your recipes!
       </p>
       <Button size="lg" asChild>

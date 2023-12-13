@@ -109,8 +109,8 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
     // Make sure to import from the /ui folder which are the shadcn components not radix
     <div className="relative">
       <Dialog open={open} onOpenChange={setOpen}>
-        <section className="my-4 py-4 h-5/6">
-        <DialogContent>
+        <section className="my-4 py-4 ">
+        <DialogContent className="h-5/6">
           <DialogHeader>
             <DialogTitle>
               {recipeToEdit ? "Edit Recipe" : "Add Recipe"}
@@ -180,7 +180,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                 {preview && <Image src={preview} alt="preview image" className=" my-2 border rounded-sm" width={60} height={60}/>}
 
                   <CldUploadButton
-                    className="pointer-events-auto my-2 rounded-md border p-2 w-20"
+                    className="pointer-events-auto my-2 rounded-md border p-2 w-20 hover:bg-muted"
                     uploadPreset="recipes"
                     onUpload={(result, widget) => {
                       if (

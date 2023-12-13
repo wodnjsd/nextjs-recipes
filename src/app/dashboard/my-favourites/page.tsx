@@ -31,7 +31,7 @@ const page = async () => {
 
   return (
     <>
-      <h2 className="text-2xl py-10 flex gap-3">Your Favourites <Star size={28} fill="yellow"/></h2>
+      <h2 className="text-2xl py-10 flex gap-3">Your Favourites <Star size={28} className="text-amber-300 fill-current" /></h2>
       <div className="flex w-full flex-col gap-8 ">
         {/* <div className="self-end">
         <SearchBar />

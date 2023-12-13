@@ -9,8 +9,8 @@ const ActivityPage = async () => {
     where: { externalId: userId },
     include: {
       recipes: { orderBy: { createdAt: "desc" } },
-      comments: { orderBy: { createdAt: "desc" } },
-      likes: { orderBy: { createdAt: "desc" } },
+      comments: { orderBy: { createdAt: "desc" }, include: { Recipe: true } },
+      likes: { orderBy: { createdAt: "desc" }, include: { Recipe: true } },
     },
   });
 
@@ -23,7 +23,6 @@ const ActivityPage = async () => {
 
   return (
     <>
-
       <UserActivity user={user} activities={allActivities} />
     </>
   );

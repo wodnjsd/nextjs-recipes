@@ -17,23 +17,24 @@ const RecipePage = async ({ params }: { params: { id: string } }) => {
   });
   return (
     <>
-      <Image
+      {/* <Image
         src={bgLarge}
         fill={true}
         alt="background"
-        className="-z-10  hidden xl:flex"
+        className="-z-10  hidden xl:block absolute"
       />
       <Image
         src={bgSmall}
         fill={true}
         alt="background"
         className="-z-10 hidden sm:flex xl:hidden"
-      />
+      /> */}
       <ShowRecipe
         recipe={recipe}
         comments={recipe.comments}
         likes={recipe.likes}
         author={recipe.author}
+    
       />
     </>
   );

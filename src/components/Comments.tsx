@@ -63,31 +63,31 @@ const Comments = ({ comments, recipeId, author }: Props) => {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ">
         <Collapsible>
           <div className="flex justify-between py-3">
             <h3 className="flex gap-2">
               Comments:
               <MessageSquare className="scale-75" strokeWidth={1} />
-              <span className="text-xs translate-y-1">{comments.length}</span>
+              <span className="text-base -translate-y-1">{comments.length}</span>
             </h3>
 
             <CollapsibleTrigger asChild>
-              <button className="rounded-lg border p-1">
-                <ChevronsUpDown strokeWidth={1} size={16} />
+              <button className="rounded-lg border border-secondary p-1">
+                <ChevronsUpDown strokeWidth={1} size={14} />
               </button>
             </CollapsibleTrigger>
           </div>
 {/* <div className="border-t border-secondary ">{comments[0].content}</div> */}
-          <CollapsibleContent>
+          <CollapsibleContent className="font-sans">
             {comments.map((comment) => (
               <div
                 key={comment.id}
                 className="flex justify-between border-t border-secondary py-3"
               >
-                <div className="ml-4">
+                <div className="ml-3 ">
                   <span className="text-xs">{author.username}</span>
-                  <p className="whitespace-pre-wrap text-sm">
+                  <p className="whitespace-pre-wrap text-sm leading-none">
                     {comment.content}
                   </p>
                 </div>
@@ -110,6 +110,7 @@ const Comments = ({ comments, recipeId, author }: Props) => {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             required
+            className="font-sans"
           />
           <button
             type="button"

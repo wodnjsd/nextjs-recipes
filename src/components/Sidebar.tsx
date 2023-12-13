@@ -32,9 +32,14 @@ const Sidebar = ({ setShowSidebar }: Props) => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false)
   const {userId} = useAuth()
+
+  const closeSidebar = () => {
+    setShowSidebar(false)
+  }
+
   return (
     <>
-      <div className="h-screen overflow-auto overscroll-contain border-r  ">
+      <div className="h-screen overflow-auto overscroll-contain  border-r">
         <div className="flex h-full flex-col justify-between px-8 py-40 ">
           <div className="w-16 h-24 absolute -top-1 left-3 bg-background z-20 lg:hidden flex justify-center items-center">
           <button>
@@ -42,25 +47,25 @@ const Sidebar = ({ setShowSidebar }: Props) => {
           </button>
           </div>
           <div className="flex flex-col gap-10">
-            <Link href="/" title="Home">
+            <Link href="/" title="Home" onClick={closeSidebar}>
               <Home />
             </Link>
             {/* <Link href="/">
             <Search />
           </Link> */}
-            <Link href="/dashboard/my-favourites" title="Favourites">
+            <Link href="/dashboard/my-favourites" title="Favourites" onClick={closeSidebar}>
               <Heart />
             </Link>
-            <Link href="/dashboard/my-recipes" title="My recipes">
+            <Link href="/dashboard/my-recipes" title="My recipes" onClick={closeSidebar}>
               <FolderOpen />
             </Link>
             <button type="button" onClick={!userId? () => setShowSignIn(true) : () => setShowAddDialog(true)} title="Add recipe">
               <FilePlus2 />
             </button>
-            <Link href="/dashboard/activity" title="My activity">
+            <Link href="/dashboard/activity" title="My activity" onClick={closeSidebar}>
               <History />
             </Link>
-            <Link href="/dashboard/profile" title="My profile">
+            <Link href="/dashboard/profile" title="My profile" onClick={closeSidebar}>
               <User />
             </Link>
           </div>

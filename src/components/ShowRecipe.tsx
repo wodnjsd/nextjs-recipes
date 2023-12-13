@@ -21,6 +21,15 @@ import { Heart } from "lucide-react";
 import SignInReminder from "./SignInReminder";
 import Image from "next/image";
 // import { revalidateTag } from "next/cache";
+import ketchup from '../assets/ketchup.png'
+import beet from '../assets/beet.png'
+import carrot from '../assets/carrot.png'
+import garlic from '../assets/garlic.png'
+import soda from '../assets/soda.png'
+import tomato from '../assets/tomato.png'
+import citrus from '../assets/citrus.png'
+import pepper from '../assets/pepper.png'
+import chilli from '../assets/chilli.png'
 
 type Props = {
   recipe: Recipe;
@@ -29,8 +38,8 @@ type Props = {
   author: User;
 };
 
+
 const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
-  //!this is wrong - will show the current user not the creator?
   const { userId } = useAuth();
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showSignInDialog, setShowSignInDialog] = useState(false);
@@ -44,6 +53,8 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   const splitInstructions = recipe.instructions
     .split("\n")
     .filter((instruction) => instruction.trim() !== "");
+    const images = [ketchup, beet, carrot, garlic, soda, tomato, citrus, pepper, chilli ]
+  const randomImage = images[Math.floor(Math.random() * images.length)]
 
   //* Adding likes
   const onLike = async () => {
@@ -64,7 +75,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   return (
     <>
-      <Card className="bg-background/80 my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
+      <Card className="relative my-8 font-ysabeau flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -73,28 +84,33 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             >
               {/* //* Heart button to like/ unlike recipe */}
               <Heart
-                className={`hover:scale-110 ${
+                className={`hover:scale-110 translate-y-4 ${
                   userLiked && "fill-current text-red-400"
                 }`}
               />
             </button>
           </div>
-          <CardTitle className="pb-5">{recipe.title}</CardTitle>
+          <CardTitle className="pb-5 text-4xl">{recipe.title}</CardTitle>
           <CardDescription>
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <br />
-            Created by: {author.username}
+            Created by: {author.username} 
           </CardDescription>
           {recipe.image && (
-      <div className="w-7/8 lg:w-4/5 pt-8">
-<img src={recipe.image} alt={recipe.title} className=" rounded-2xl"/>
-      </div>
-        )}
+            <div className="w-5/6 pt-8 lg:w-4/5 ">
+              {/* <Image src={recipe.image} alt={recipe.title} fill={true} /> */}
+              <img
+                src={recipe.image}
+                alt={recipe.title}
+                className=" rounded-2xl"
+              />
+            </div>
+          )}
         </CardHeader>
-        <CardContent className="flex flex-col gap-12">
+        <CardContent className="flex flex-col gap-12 ">
           <div>
-            <h2 className="py-1 text-lg font-semibold">Ingredients:</h2>
+            <h2 className="py-1 text-xl font-semibold">Ingredients:</h2>
             <ul className="translate-x-3">
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="list-disc">
@@ -104,7 +120,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             </ul>
           </div>
           <div>
-            <h2 className="py-1 text-lg font-semibold">Instructions:</h2>
+            <h2 className="py-1 text-xl font-semibold">Instructions:</h2>
             <ul className="translate-x-4">
               {splitInstructions.map((instruction, index) => (
                 <li key={index} className="list-decimal">
@@ -140,19 +156,23 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
               <DialogTrigger asChild>
                 <Button variant="destructive">Delete recipe</Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="flex flex-col justify-between h-52">
                 <DeleteConfirm recipeId={recipe.id} />
               </DialogContent>
             </Dialog>
           </CardFooter>
         )}
+        <Image src={randomImage} alt="ketchup" className="absolute right-4 bottom-4 w-12 md:w-20 lg:w-28" />
       </Card>
       <AddEditDialog
         open={showAddEditDialog}
         setOpen={setShowAddEditDialog}
         recipeToEdit={recipe}
+      
       />
-      { showSignInDialog && <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />}
+      {showSignInDialog && (
+        <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />
+      )}
     </>
   );
 };

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
-import AIChatButton from "@/components/AIChatButton";
+// import AIChatButton from "@/components/AIChatButton";
 import Sidebar from "./Sidebar";
 
 const NavBar = () => {
@@ -61,9 +61,9 @@ const NavBar = () => {
                 <Button>Sign In</Button>
               </SignInButton>
             </SignedOut>
-            <section className="hidden lg:flex">
+            {/* <section className="hidden lg:flex">
               <AIChatButton />
-            </section>
+            </section> */}
           </div>
         </div>
       </div>

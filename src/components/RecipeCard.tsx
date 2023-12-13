@@ -33,7 +33,7 @@ const RecipeCard = ({ recipe, likes, author }: Props) => {
             alt={recipe.title}
             className="absolute object-cover brightness-50 group-hover:scale-105"
             fill={true}
-          />) : (<div className="absolute w-full h-full object-cover bg-slate-400 dark:bg-slate-600"></div>
+          />) : (<div className="absolute w-full h-full object-cover bg-stone-400 dark:bg-zinc-600"></div>
         )}
         <CardContent className="flex flex-col gap-2 justify-center z-10 group-hover:scale-105">
           <CardTitle  className=" text-slate-50">{recipe.title}</CardTitle>

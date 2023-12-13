@@ -1,6 +1,6 @@
-import { recipesIndex } from "@/lib/db/pinecone";
+// import { recipesIndex } from "@/lib/db/pinecone";
 import prisma from "@/lib/db/prisma";
-import { getEmbedding } from "@/lib/openai";
+// import { getEmbedding } from "@/lib/openai";
 import {
   createRecipeSchema,
   deleteRecipeSchema,
@@ -39,44 +39,57 @@ export async function POST(req: Request) {
     }
 
     //generate embedding
-    const embedding = await getEmbeddingForRecipe(
-      title,
-      ingredients,
-      instructions,
-      tags,
-      image!,
-    );
+    // const embedding = await getEmbeddingForRecipe(
+    //   title,
+    //   ingredients,
+    //   instructions,
+    //   tags,
+    //   image!,
+    // );
 
     //* wrapping mongodb and pinecone operations in prisma transaction
     //* can do multiple database operations and will only be applied if they all succeed
     //* if error thrown inside transaction block then all operations on tx client will be rolled back
     //tx is the prisma client part of transactions
-    const recipe = await prisma.$transaction(async (tx) => {
-      const recipe = await tx.recipe.create({
-        data: {
-          title,
-          ingredients: { set: ingredientsArray },
-          instructions,
-          tags: { set: tagsArray },
-          image,
-          author: {
-            connect: { externalId: userId },
-          },
+    // const recipe = await prisma.$transaction(async (tx) => {
+    //   const recipe = await tx.recipe.create({
+    //     data: {
+    //       title,
+    //       ingredients: { set: ingredientsArray },
+    //       instructions,
+    //       tags: { set: tagsArray },
+    //       image,
+    //       author: {
+    //         connect: { externalId: userId },
+    //       },
+    //     },
+    //   });
+
+    const recipe = await prisma.recipe.create({
+      data: {
+        title,
+        ingredients: { set: ingredientsArray },
+        instructions,
+        tags: { set: tagsArray },
+        image,
+        author: {
+          connect: { externalId: userId },
         },
-      });
-      //creating entry in Pincone
-      //need to put Pinecone after mongodb as prisma is only part of mongodb operation
-      // which means pinecone operation cannot be rolled back
-      //if pinecone operation fails mongodb create will be undone
-      await recipesIndex.upsert([
-        {
-          id: recipe.id,
-          values: embedding,
-          metadata: { userId },
-        },
-      ]);
-      return recipe;
+      },
     });
+    //creating entry in Pincone
+    //need to put Pinecone after mongodb as prisma is only part of mongodb operation
+    // which means pinecone operation cannot be rolled back
+    //if pinecone operation fails mongodb create will be undone
+    // await recipesIndex.upsert([
+    //   {
+    //     id: recipe.id,
+    //     values: embedding,
+    //     metadata: { userId },
+    //   },
+    // ]);
+    // return recipe;
+
     //success response
     return Response.json({ recipe }, { status: 201 });
   } catch (err) {
@@ -96,7 +109,8 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { id, title, ingredients, instructions, tags, image } = parseResult.data;
+    const { id, title, ingredients, instructions, tags, image } =
+      parseResult.data;
 
     //check recipe exists with the id
     const recipe = await prisma.recipe.findUnique({ where: { id } });
@@ -110,37 +124,35 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
-    const embedding = await getEmbeddingForRecipe(
-      title,
-      ingredients,
-      instructions,
-      tags,
-      image!,
-    );
+    // const embedding = await getEmbeddingForRecipe(
+    //   title,
+    //   ingredients,
+    //   instructions,
+    //   tags,
+    //   image!,
+    // );
 
     const ingredientsArray = ingredients.split(/\r?\n/).filter(Boolean);
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
 
-    const updatedRecipe = await prisma.$transaction(async (tx) => {
-      const updatedRecipe = await tx.recipe.update({
-        where: { id },
-        data: {
-          title,
-          ingredients: { set: ingredientsArray },
-          instructions,
-          tags: { set: tagsArray },
-          image,
-        },
-      });
-      await recipesIndex.upsert([
-        {
-          id,
-          values: embedding,
-          metadata: { userId },
-        },
-      ]);
-      return updatedRecipe;
+    const updatedRecipe = await prisma.recipe.update({
+      where: { id },
+      data: {
+        title,
+        ingredients: { set: ingredientsArray },
+        instructions,
+        tags: { set: tagsArray },
+        image,
+      },
     });
+    // await recipesIndex.upsert([
+    //   {
+    //     id,
+    //     values: embedding,
+    //     metadata: { userId },
+    //   },
+    // ]);
+    // return updatedRecipe;
 
     return Response.json({ updatedRecipe }, { status: 200 });
   } catch (err) {
@@ -174,10 +186,11 @@ export async function DELETE(req: Request) {
     if (!userId || userId !== recipe.userId) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
-    await prisma.$transaction(async (tx) => {
-      await tx.recipe.delete({ where: { id } });
-      await recipesIndex.deleteOne(id);
-    });
+    // await prisma.$transaction(async (tx) => {
+    //   await tx.recipe.delete({ where: { id } });
+    //   await recipesIndex.deleteOne(id);
+    // });
+    await prisma.recipe.delete( {where: { id } })
     // revalidatePath("/recipes", 'page');
 
     return Response.json({ message: "Recipe deleted" }, { status: 200 });
@@ -187,17 +200,25 @@ export async function DELETE(req: Request) {
   }
 }
 
-async function getEmbeddingForRecipe(
-  title: string,
-  ingredients: string,
-  instructions: string,
-  tags: string,
-  image: string,
-  // comments: string[],
-  // likes: number
-) {
-  //from openai file
-  return getEmbedding(
-    title + "\n\n" + ingredients + "\n\n" + instructions + "\n\n" + tags + "\n\n" + image
-  );
-}
+// async function getEmbeddingForRecipe(
+//   title: string,
+//   ingredients: string,
+//   instructions: string,
+//   tags: string,
+//   image: string,
+//   // comments: string[],
+//   // likes: number
+// ) {
+//   //from openai file
+//   return getEmbedding(
+//     title +
+//       "\n\n" +
+//       ingredients +
+//       "\n\n" +
+//       instructions +
+//       "\n\n" +
+//       tags +
+//       "\n\n" +
+//       image,
+//   );
+// }

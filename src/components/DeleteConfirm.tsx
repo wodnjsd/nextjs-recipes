@@ -43,17 +43,10 @@ const DeleteConfirm = ({ recipeId }: Props) => {
 
   return (
     <>
-      {/* <AlertDialogTitle>Are you sure you want to delete this?</AlertDialogTitle>
-      <AlertDialogFooter>
-        <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
-        <AlertDialogAction type="button" onClick={deleteRecipe}>
-          Delete
-        </AlertDialogAction>
-      </AlertDialogFooter> */}
       <DialogTitle>Are you sure you want to delete this?</DialogTitle>
-      <DialogFooter>
+      <DialogFooter >
         <DialogClose asChild>
-          <Button type="button" variant="secondary">
+          <Button type="button" variant="secondary" className="my-1">
             Cancel
           </Button>
         </DialogClose>
@@ -62,6 +55,7 @@ const DeleteConfirm = ({ recipeId }: Props) => {
           variant="destructive"
           loading={deleting}
           onClick={deleteRecipe}
+          className="my-1"
         >
           Delete
         </LoadingButton>

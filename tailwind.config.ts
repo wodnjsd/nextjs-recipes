@@ -75,7 +75,8 @@ module.exports = {
         circle: 'circle'
       },
       fontFamily: {
-        playfair: ['var(--font-playfair)']
+        playfair: ['var(--font-playfair)'],
+        ysabeau: ['var(--font-ysabeau)']
       },
     },
   },
