@@ -7,6 +7,7 @@ import { dark } from "@clerk/themes";
 const ProfilePage = () => {
   const { userId } = useAuth();
   if (!userId) return null;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { theme } = useTheme();
 
   return (

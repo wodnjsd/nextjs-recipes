@@ -43,7 +43,7 @@ const page = async () => {
           ))}
           {myRecipes.length === 0 && (
             <div className="col-span-full text-center">
-              You haven't added any recipes yet!
+              {`You haven't added any recipes yet!`}
             </div>
           )}
         </div>

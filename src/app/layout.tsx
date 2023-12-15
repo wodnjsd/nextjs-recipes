@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cinzel, Ysabeau_SC } from "next/font/google";
+import { Inter, Playfair_Display, Cinzel, Ysabeau_SC, Ysabeau } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "./ThemeProvider";
