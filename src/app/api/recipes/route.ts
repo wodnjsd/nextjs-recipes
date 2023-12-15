@@ -1,6 +1,4 @@
-// import { recipesIndex } from "@/lib/db/pinecone";
 import prisma from "@/lib/db/prisma";
-// import { getEmbedding } from "@/lib/openai";
 import {
   createRecipeSchema,
   deleteRecipeSchema,
@@ -38,33 +36,6 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
-    //generate embedding
-    // const embedding = await getEmbeddingForRecipe(
-    //   title,
-    //   ingredients,
-    //   instructions,
-    //   tags,
-    //   image!,
-    // );
-
-    //* wrapping mongodb and pinecone operations in prisma transaction
-    //* can do multiple database operations and will only be applied if they all succeed
-    //* if error thrown inside transaction block then all operations on tx client will be rolled back
-    //tx is the prisma client part of transactions
-    // const recipe = await prisma.$transaction(async (tx) => {
-    //   const recipe = await tx.recipe.create({
-    //     data: {
-    //       title,
-    //       ingredients: { set: ingredientsArray },
-    //       instructions,
-    //       tags: { set: tagsArray },
-    //       image,
-    //       author: {
-    //         connect: { externalId: userId },
-    //       },
-    //     },
-    //   });
-
     const recipe = await prisma.recipe.create({
       data: {
         title,
@@ -77,18 +48,6 @@ export async function POST(req: Request) {
         },
       },
     });
-    //creating entry in Pincone
-    //need to put Pinecone after mongodb as prisma is only part of mongodb operation
-    // which means pinecone operation cannot be rolled back
-    //if pinecone operation fails mongodb create will be undone
-    // await recipesIndex.upsert([
-    //   {
-    //     id: recipe.id,
-    //     values: embedding,
-    //     metadata: { userId },
-    //   },
-    // ]);
-    // return recipe;
 
     //success response
     return Response.json({ recipe }, { status: 201 });
@@ -124,14 +83,6 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
 
-    // const embedding = await getEmbeddingForRecipe(
-    //   title,
-    //   ingredients,
-    //   instructions,
-    //   tags,
-    //   image!,
-    // );
-
     const ingredientsArray = ingredients.split(/\r?\n/).filter(Boolean);
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
 
@@ -145,14 +96,6 @@ export async function PUT(req: Request) {
         image,
       },
     });
-    // await recipesIndex.upsert([
-    //   {
-    //     id,
-    //     values: embedding,
-    //     metadata: { userId },
-    //   },
-    // ]);
-    // return updatedRecipe;
 
     return Response.json({ updatedRecipe }, { status: 200 });
   } catch (err) {
@@ -186,10 +129,7 @@ export async function DELETE(req: Request) {
     if (!userId || userId !== recipe.userId) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
     }
-    // await prisma.$transaction(async (tx) => {
-    //   await tx.recipe.delete({ where: { id } });
-    //   await recipesIndex.deleteOne(id);
-    // });
+
     await prisma.recipe.delete( {where: { id } })
     // revalidatePath("/recipes", 'page');
 
@@ -199,26 +139,3 @@ export async function DELETE(req: Request) {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
-// async function getEmbeddingForRecipe(
-//   title: string,
-//   ingredients: string,
-//   instructions: string,
-//   tags: string,
-//   image: string,
-//   // comments: string[],
-//   // likes: number
-// ) {
-//   //from openai file
-//   return getEmbedding(
-//     title +
-//       "\n\n" +
-//       ingredients +
-//       "\n\n" +
-//       instructions +
-//       "\n\n" +
-//       tags +
-//       "\n\n" +
-//       image,
-//   );
-// }
