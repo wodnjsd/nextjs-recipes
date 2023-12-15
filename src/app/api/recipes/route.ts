@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     //if validation fails
     if (!parseResult.success) {
-      console.error(parseResult.error);
+      // console.error(parseResult.error);
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     //success response
     return Response.json({ recipe }, { status: 201 });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -64,7 +64,7 @@ export async function PUT(req: Request) {
     const parseResult = updateRecipeSchema.safeParse(body);
 
     if (!parseResult.success) {
-      console.error(parseResult.error);
+      // console.error(parseResult.error);
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
@@ -99,7 +99,7 @@ export async function PUT(req: Request) {
 
     return Response.json({ updatedRecipe }, { status: 200 });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -113,7 +113,7 @@ export async function DELETE(req: Request) {
     const parseResult = deleteRecipeSchema.safeParse(body);
 
     if (!parseResult.success) {
-      console.error(parseResult.error);
+      // console.error(parseResult.error);
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
@@ -135,7 +135,7 @@ export async function DELETE(req: Request) {
 
     return Response.json({ message: "Recipe deleted" }, { status: 200 });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -31,7 +31,7 @@ const DeleteConfirm = ({ recipeId }: Props) => {
       router.push("/recipes");
       router.refresh();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       //!add toastify later
       alert("something went wrong");
     } finally {

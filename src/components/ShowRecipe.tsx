@@ -58,7 +58,6 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   //* Adding likes
   const onLike = async () => {
-    console.log("here");
     try {
       const response = await fetch(`/api/recipes/${recipe.id}`, {
         method: "PUT",
@@ -69,7 +68,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
       if (!response.ok) throw Error("Status code " + response.status);
       router.refresh();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

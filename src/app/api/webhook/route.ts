@@ -27,7 +27,7 @@ async function handler(request: Request) {
       heads as IncomingHttpHeaders & WebhookRequiredHeaders,
     ) as WebhookEvent;
   } catch (err) {
-    console.log((err as Error).message);
+    // console.log((err as Error).message);
     return NextResponse.json({ message: err }, { status: 400 });
   }
 
@@ -48,7 +48,7 @@ async function handler(request: Request) {
       });
       return Response.json({ message: "User created" }, { status: 200 });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return NextResponse.json(
         { message: "Internal Server Error" },
         { status: 500 },

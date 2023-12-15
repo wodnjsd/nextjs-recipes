@@ -24,7 +24,7 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning={true}>
         <body className={`${inter.className} ${playfair.variable} ${ysabeau.variable}` } >
           <ThemeProvider attribute="class">
             <main className="w-screen">

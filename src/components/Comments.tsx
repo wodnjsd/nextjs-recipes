@@ -36,7 +36,7 @@ const Comments = ({ comments, recipeId, author }: Props) => {
       router.refresh();
       setComment("");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       //!add toast later
       alert("something went wrong");
     }
@@ -56,7 +56,7 @@ const Comments = ({ comments, recipeId, author }: Props) => {
       toast({ variant: "destructive", description: "Comment deleted" });
       router.refresh();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       alert("something went wrong");
     }
   };

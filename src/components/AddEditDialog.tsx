@@ -64,7 +64,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
 
   //*CREATE and UPDATE
   const onSubmit = async (input: CreateRecipeSchema) => {
-    console.log(input);
+    // console.log(input);
 
     try {
       // Update
@@ -98,7 +98,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
       //close dialog
       setOpen(false);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       //!add toastify later
       alert("something went wrong");
     }
@@ -192,7 +192,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                       ) {
                         const imageUrl = result.info.secure_url as string;
                         const preview = result.info.thumbnail_url as string;
-                        console.log(result.info);
+                        // console.log(result.info);
                         setImgUrl(imageUrl);
                         setPreview(preview);
                         form.setValue("image", imageUrl);

@@ -40,7 +40,7 @@ const RecipeCard = ({ recipe, likes, author }: Props) => {
           <CardDescription className="text-slate-200">
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
-            <p>By: {author.username}</p>
+            <span>By: {author.username}</span>
           </CardDescription>
           <div>{recipe.tags.map((tag) => <span key={tag} className="text-xs px-1 text-slate-300">#{tag}</span>)}</div>
         </CardContent>

@@ -15,12 +15,12 @@ export async function POST(
 ) {
   try {
     const body = await req.json();
-    console.log(body);
+    // console.log(body);
     const parseResult = createCommentSchema.safeParse(body);
     const recipeId = params.id;
 
     if (!parseResult.success) {
-      console.log(parseResult.error);
+      // console.log(parseResult.error);
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
@@ -42,7 +42,7 @@ export async function POST(
 
     return Response.json({ comment }, { status: 201 });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -54,7 +54,7 @@ export async function DELETE(req: Request) {
     const parseResult = deleteCommentSchema.safeParse(body);
 
     if (!parseResult.success) {
-      console.error(parseResult.error);
+      // console.error(parseResult.error);
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
@@ -75,7 +75,7 @@ export async function DELETE(req: Request) {
     return Response.json({ message: "Comment deleted" }, { status: 200 });
 
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
