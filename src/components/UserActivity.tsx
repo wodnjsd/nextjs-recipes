@@ -46,28 +46,31 @@ const UserActivity = ({ user, activities }: Props) => {
               <TableRow key={activity.id}>
                 <TableCell>{activity.createdAt.toLocaleDateString()}</TableCell>
                 <TableCell>
-                  <p className="flex gap-1">
-                    {(activity.type === "recipe" && (
-                      <>
-                        <PenLine strokeWidth={1} size={18} />
-                        {`You created '${(activity as Recipe).title}'`}
-                      </>
+                  {(activity.type === "recipe" && (
+                    <div className="flex gap-1">
+                      <PenLine strokeWidth={1} size={18} />
+                      {`You created '${(activity as Recipe).title}'`}
+                    </div>
+                  )) ||
+                    (activity.type === "comment" && (
+                      <div className="flex gap-2">
+                        <MessageSquare strokeWidth={1} size={18} />
+                        {`You commented '${(activity as Comment).content.slice(
+                          0,
+                          15,
+                        )}${
+                          (activity as Comment).content.length > 15 ? "..." : ""
+                        }'`}
+                      </div>
                     )) ||
-                      (activity.type === "comment" && (
-                        <>
-                          <MessageSquare strokeWidth={1} size={18} />
-                          {`You commented '${(activity as Comment).content}'`}
-                        </>
-                      )) ||
-                      (activity.type === "like" && (
-                        <>
-                          <Heart strokeWidth={1} size={18} />
-                          {`You liked '${
-                            (activity as LikeWithRecipe).Recipe.title
-                          }'`}
-                        </>
-                      ))}
-                  </p>
+                    (activity.type === "like" && (
+                      <div className="flex gap-2">
+                        <Heart strokeWidth={1} size={18} />
+                        {`You liked '${
+                          (activity as LikeWithRecipe).Recipe.title
+                        }'`}
+                      </div>
+                    ))}
                 </TableCell>
                 <TableCell>
                   {activity.type === "recipe" ? (

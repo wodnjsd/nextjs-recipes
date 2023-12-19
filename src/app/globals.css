@@ -10,7 +10,7 @@
     --card: 214 211 209;
     --card-foreground: 41 37 36;
  
-    --popover: 0 0% 100%;
+    --popover: 214 211 209;
     --popover-foreground: 41 37 36;
  
     --primary: 38 38 38;
@@ -43,6 +43,8 @@
   .dark {
     --background: 38 38 38 ;
     --foreground: 245 245 245;
+
+    --nav: 38 38 38  ;
  
     --card: 63 63 70;
     --card-foreground: 245 245 245;

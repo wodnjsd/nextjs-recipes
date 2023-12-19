@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     //filter Boolean removes any empty elements from the arrays
     const ingredientsArray = ingredients.split(/\r?\n/).filter(Boolean);
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
-
+    const instructionsArray = instructions.split(/\r?\n/).filter(Boolean);
     const { userId } = auth();
     // const user = await currentUser();
     // const author = user && user.username ? user.username : user?.firstName;
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       data: {
         title,
         ingredients: { set: ingredientsArray },
-        instructions,
+        instructions: {set: instructionsArray },
         tags: { set: tagsArray },
         image,
         author: {
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     //success response
     return Response.json({ recipe }, { status: 201 });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -85,13 +85,14 @@ export async function PUT(req: Request) {
 
     const ingredientsArray = ingredients.split(/\r?\n/).filter(Boolean);
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
+    const instructionsArray = instructions.split(/\r?\n/).filter(Boolean);
 
     const updatedRecipe = await prisma.recipe.update({
       where: { id },
       data: {
         title,
         ingredients: { set: ingredientsArray },
-        instructions,
+        instructions: { set: instructionsArray },
         tags: { set: tagsArray },
         image,
       },
@@ -99,7 +100,7 @@ export async function PUT(req: Request) {
 
     return Response.json({ updatedRecipe }, { status: 200 });
   } catch (err) {
-    // console.log(err);
+     console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -135,7 +136,7 @@ export async function DELETE(req: Request) {
 
     return Response.json({ message: "Recipe deleted" }, { status: 200 });
   } catch (err) {
-    // console.log(err);
+     console.log(err);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -56,7 +56,7 @@ const Comments = ({ comments, recipeId, author }: Props) => {
       toast({ variant: "destructive", description: "Comment deleted" });
       router.refresh();
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       alert("something went wrong");
     }
   };
@@ -71,7 +71,6 @@ const Comments = ({ comments, recipeId, author }: Props) => {
               <MessageSquare className="scale-75" strokeWidth={1} />
               <span className="text-base -translate-y-1">{comments.length}</span>
             </h3>
-
             <CollapsibleTrigger asChild>
               <button className="rounded-lg border border-secondary p-1">
                 <ChevronsUpDown strokeWidth={1} size={14} />

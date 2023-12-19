@@ -15,7 +15,7 @@ model Recipe {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   ingredients  String[]
-  instructions String
+  instructions String[]
   comments     Comment[]
   tags         String[]
   createdAt    DateTime  @default(now())

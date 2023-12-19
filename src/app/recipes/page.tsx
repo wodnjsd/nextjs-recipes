@@ -51,7 +51,7 @@ export default async function RecipesPage({
   }
 
   return (
-    <div className="flex w-full flex-col gap-8  ">
+    <div className="flex w-full flex-col gap-8 mx-4 ">
       <div className="self-end">
         <SearchBar />
       </div>

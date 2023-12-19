@@ -20,16 +20,7 @@ import { useToast } from "./ui/use-toast";
 import { Heart } from "lucide-react";
 import SignInReminder from "./SignInReminder";
 import Image from "next/image";
-// import { revalidateTag } from "next/cache";
-import ketchup from '../assets/ketchup.png'
-import beet from '../assets/beet.png'
-import carrot from '../assets/carrot.png'
-import garlic from '../assets/garlic.png'
-import soda from '../assets/soda.png'
-import tomato from '../assets/tomato.png'
-import citrus from '../assets/citrus.png'
-import pepper from '../assets/pepper.png'
-import chilli from '../assets/chilli.png'
+import { imageData } from "@/assets/imageData";
 
 type Props = {
   recipe: Recipe;
@@ -37,7 +28,6 @@ type Props = {
   likes: Like[];
   author: User;
 };
-
 
 const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   const { userId } = useAuth();
@@ -50,11 +40,10 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
   ).toDateString();
-  const splitInstructions = recipe.instructions
-    .split("\n")
-    .filter((instruction) => instruction.trim() !== "");
-    const images = [ketchup, beet, carrot, garlic, soda, tomato, citrus, pepper, chilli ]
-  const randomImage = images[Math.floor(Math.random() * images.length)]
+  // const splitInstructions = recipe.instructions
+  //   .split("\n")
+  //   .filter((instruction) => instruction.trim() !== "");
+  const randomImage = imageData[Math.floor(Math.random() * imageData.length)];
 
   //* Adding likes
   const onLike = async () => {
@@ -68,13 +57,13 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
       if (!response.ok) throw Error("Status code " + response.status);
       router.refresh();
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 
   return (
     <>
-      <Card className="relative my-8 font-ysabeau flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
+      <Card className="font-ysabeau relative my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -83,7 +72,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             >
               {/* //* Heart button to like/ unlike recipe */}
               <Heart
-                className={`hover:scale-110 translate-y-4 ${
+                className={`translate-y-4 hover:scale-110 ${
                   userLiked && "fill-current text-red-400"
                 }`}
               />
@@ -94,7 +83,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <br />
-            Created by: {author.username} 
+            Created by: {author.username}
           </CardDescription>
           {recipe.image && (
             <div className="w-5/6 pt-8 lg:w-4/5 ">
@@ -107,7 +96,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             </div>
           )}
         </CardHeader>
-        <CardContent className="flex flex-col gap-12 ">
+        <CardContent className="flex flex-col gap-12">
           <div>
             <h2 className="py-1 text-xl font-semibold">Ingredients:</h2>
             <ul className="translate-x-3">
@@ -121,7 +110,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
           <div>
             <h2 className="py-1 text-xl font-semibold">Instructions:</h2>
             <ul className="translate-x-4">
-              {splitInstructions.map((instruction, index) => (
+              {recipe.instructions.map((instruction, index) => (
                 <li key={index} className="list-decimal">
                   {instruction}
                 </li>
@@ -142,32 +131,37 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
           {/* //* Show and add comments */}
           <Comments comments={comments} recipeId={recipe.id} author={author} />
         </CardContent>
-        {/* //* Edit and delete only available if you're the recipe creator  */}
-        {userId === recipe.userId && (
-          <CardFooter className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowAddEditDialog(true)}
-            >
-              Edit
-            </Button>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="destructive">Delete recipe</Button>
-              </DialogTrigger>
-              <DialogContent className="flex flex-col justify-between h-52">
-                <DeleteConfirm recipeId={recipe.id} />
-              </DialogContent>
-            </Dialog>
-          </CardFooter>
-        )}
-        <Image src={randomImage} alt="ketchup" className="absolute right-4 bottom-4 w-12 md:w-20 lg:w-28" />
+        <CardFooter className="flex gap-3">
+           {/* //* Edit and delete only available if you're the recipe creator  */}
+          {userId === recipe.userId && (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setShowAddEditDialog(true)}
+              >
+                Edit
+              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive">Delete recipe</Button>
+                </DialogTrigger>
+                <DialogContent className="flex h-52 flex-col justify-between">
+                  <DeleteConfirm recipeId={recipe.id} />
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+          <Image
+            src={randomImage}
+            alt="small image"
+            className="absolute bottom-5 right-4 w-12 md:w-20 lg:w-24"
+          />
+        </CardFooter>
       </Card>
       <AddEditDialog
         open={showAddEditDialog}
         setOpen={setShowAddEditDialog}
         recipeToEdit={recipe}
-      
       />
       {showSignInDialog && (
         <SignInReminder open={showSignInDialog} setOpen={setShowSignInDialog} />

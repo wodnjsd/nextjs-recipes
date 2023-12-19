@@ -21,6 +21,7 @@ module.exports = {
         input: "rgb(var(--input))",
         ring: "rgb(var(--ring))",
         background: "rgb(var(--background))",
+        nav: "rgb(var(--nav))",
         foreground: "rgb(var(--foreground))",
         primary: {
           DEFAULT: "rgb(var(--primary))",

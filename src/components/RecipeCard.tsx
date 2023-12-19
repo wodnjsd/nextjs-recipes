@@ -37,7 +37,7 @@ const RecipeCard = ({ recipe, likes, author }: Props) => {
         )}
         <CardContent className="flex flex-col gap-2 justify-center z-10 group-hover:scale-105">
           <CardTitle  className=" text-slate-50">{recipe.title}</CardTitle>
-          <CardDescription className="text-slate-200">
+          <CardDescription className="text-slate-200 flex flex-col">
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <span>By: {author.username}</span>

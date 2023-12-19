@@ -20,7 +20,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="z-20 h-full w-full max-w-screen-2xl bg-background py-6">
+      <div className="z-20 h-full w-full max-w-screen-2xl bg-background px-8 py-4">
         <div className=" flex flex-wrap items-center justify-between gap-3">
           <button onClick={toggleSidebar} className="lg:hidden">
             <LayoutDashboard />
@@ -28,7 +28,7 @@ const NavBar = () => {
           <Link href="/recipes" className="flex items-center gap-1">
             {/* //!Add Logo, show only logo on smaller screens */}
             {/* <span>Logo</span> */}
-            <span className="font-playfair text-2xl font-extrabold tracking-wide lg:text-4xl">
+            <span className="font-ysabeau text-2xl font-extrabold tracking-wide lg:text-4xl">
               Spicify
             </span>
           </Link>
