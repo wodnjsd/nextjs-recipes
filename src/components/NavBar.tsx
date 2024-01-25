@@ -20,7 +20,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="z-20 h-full w-full max-w-screen-2xl bg-background px-8 py-4">
+      <div className=" translate-x-2 z-20 h-full w-full max-w-screen-2xl bg-background px-6 py-4 lg:px-8">
         <div className=" flex flex-wrap items-center justify-between gap-3">
           <button onClick={toggleSidebar} className="lg:hidden">
             <LayoutDashboard />
@@ -73,8 +73,9 @@ const NavBar = () => {
           </section>
         </aside>
       )}
+      {/* automatically show sidebar when screen is larger */}
       <section className="fixed inset-0 hidden w-24 bg-background h-full lg:block ">
-        <Sidebar setShowSidebar={setShowSidebar} />
+        <Sidebar setShowSidebar={setShowSidebar}/>
       </section>
     </>
   );

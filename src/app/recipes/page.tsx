@@ -3,7 +3,7 @@ import prisma from "@/lib/db/prisma";
 import RecipeCard from "@/components/RecipeCard";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
-// import { Suspense } from "react";
+import { Filter } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Spicify - Recipes",
@@ -52,7 +52,8 @@ export default async function RecipesPage({
 
   return (
     <div className="flex w-full flex-col gap-8 mx-4 ">
-      <div className="self-end">
+      <div className="flex justify-between">
+      <Filter strokeWidth={1} size={20}/>
         <SearchBar />
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

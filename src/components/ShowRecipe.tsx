@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { SignIn, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { useState } from "react";
@@ -20,7 +20,7 @@ import { useToast } from "./ui/use-toast";
 import { Heart } from "lucide-react";
 import SignInReminder from "./SignInReminder";
 import Image from "next/image";
-import { imageData } from "@/assets/imageData";
+import { imageData } from "@/lib/imageData";
 
 type Props = {
   recipe: Recipe;
@@ -40,9 +40,6 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
   const createdUpdatedAtTimestamp = (
     wasUpdated ? recipe.updatedAt : recipe.createdAt
   ).toDateString();
-  // const splitInstructions = recipe.instructions
-  //   .split("\n")
-  //   .filter((instruction) => instruction.trim() !== "");
   const randomImage = imageData[Math.floor(Math.random() * imageData.length)];
 
   //* Adding likes
@@ -63,7 +60,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
 
   return (
     <>
-      <Card className="font-ysabeau relative my-8 flex w-4/5 max-w-3xl flex-col gap-8 px-1 py-5 md:px-16 md:py-12  ">
+      <Card className="font-ysabeau relative my-8 flex w-4/5 max-w-3xl flex-col gap-6 px-1 py-5 md:px-16 md:py-12  ">
         <CardHeader>
           <div className="absolute self-end">
             <button
@@ -78,15 +75,16 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
               />
             </button>
           </div>
-          <CardTitle className="pb-5 text-4xl">{recipe.title}</CardTitle>
+          <CardTitle className="pb-3 text-4xl">{recipe.title}</CardTitle>
           <CardDescription>
             {createdUpdatedAtTimestamp}
             {wasUpdated && " (updated)"}
             <br />
             Created by: {author.username}
+            <p>{recipe.cuisine}</p>
           </CardDescription>
           {recipe.image && (
-            <div className="w-5/6 pt-8 lg:w-4/5 ">
+            <div className="self-center w-5/6 pt-8 lg:w-4/5 ">
               {/* <Image src={recipe.image} alt={recipe.title} fill={true} /> */}
               <img
                 src={recipe.image}
@@ -122,7 +120,7 @@ const ShowRecipe = ({ recipe, comments, likes, author }: Props) => {
             <h2 className="py-2">Tags:</h2>
             <p>
               {recipe.tags.map((tag, index) => (
-                <span key={index} className="rounded-full border px-2 py-1">
+                <span key={index} className="rounded-full border border-secondary px-2 pb-1">
                   {tag.startsWith("#") ? tag : `#${tag}`}
                 </span>
               ))}

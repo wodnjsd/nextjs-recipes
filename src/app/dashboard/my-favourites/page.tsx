@@ -33,9 +33,7 @@ const page = async () => {
     <>
       <h2 className="text-2xl py-10 flex gap-3">Your Favourites <Star size={28} className="text-amber-300 fill-current" /></h2>
       <div className="flex w-full flex-col gap-8 ">
-        {/* <div className="self-end">
-        <SearchBar />
-      </div> */}
+
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {myFavourites.map((recipe) => (
             <Link key={recipe.id} href={`/recipes/${recipe.id}`} passHref>

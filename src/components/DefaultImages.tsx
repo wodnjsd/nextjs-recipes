@@ -1,24 +1,19 @@
-import {
-  DialogClose,
-} from "./ui/dialog";
+import Image from "next/image";
+import { DialogClose } from "./ui/dialog";
+import { defaultImages } from "@/lib/presetImages";
 
 interface Props {
   form: any;
   setPreview: React.Dispatch<React.SetStateAction<string>>;
 }
-const presetImages = [
-  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219039/turkey-1460853_1280_tf3jz0.png",
-  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219038/spaghetti-7433732_1280_hoycqw.jpg",
-  "https://res.cloudinary.com/djuip85dc/image/upload/v1701219047/eggplant-2924511_1280_orufwf.png",
-];
 
 const DefaultImages = ({ form, setPreview }: Props) => {
   return (
     <>
-      <div className="z-40 grid grid-cols-4 gap-5">
-        {presetImages.map((img, i ) => (
+      <div className="z-40 grid grid-cols-4 gap-2 justify-items-center">
+        {defaultImages.map((img, i) => (
           <DialogClose asChild key={i}>
-            <img
+            <Image
               key={img}
               src={img}
               alt="default"
@@ -26,7 +21,9 @@ const DefaultImages = ({ form, setPreview }: Props) => {
                 form.setValue("image", img);
                 setPreview(img);
               }}
-              className="w-24 cursor-pointer"
+              width={100}
+              height={100}
+              className="cursor-pointer rounded-lg p-1 hover:scale-105 hover:border"
             />
           </DialogClose>
         ))}

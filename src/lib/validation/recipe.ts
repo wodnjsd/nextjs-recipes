@@ -7,8 +7,9 @@ export const createRecipeSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   // ingredients: z.string().array().min(1, {message: "Need some ingredients!"}),
   ingredients: z.string().min(1, {message: "Need some ingredients!"}),
-  instructions: z.string().min(1, { message: "Add some content" }),
+  instructions: z.string().min(1, { message: "Please add some instructions" }),
   // tags: z.string().array(),
+  cuisine: z.string().min(1, {message: "Please select a cuisine"}),
   tags: z.string(),
   image: z.string().optional()
 

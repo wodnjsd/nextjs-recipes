@@ -27,18 +27,32 @@ import { useToast } from "./ui/use-toast";
 import LoadingButton from "./LoadingButton";
 import { useState } from "react";
 import { CldUploadButton } from "next-cloudinary";
-
+import { options } from "@/lib/select_options";
 import Image from "next/image";
 import DefaultImages from "./DefaultImages";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   recipeToEdit?: Recipe;
+  closeSidebar?: () => void;
 }
 
-const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
+const AddEditDialog = ({
+  open,
+  setOpen,
+  recipeToEdit,
+  closeSidebar,
+}: Props) => {
   const router = useRouter();
   const { toast } = useToast();
   const [imgUrl, setImgUrl] = useState("");
@@ -46,11 +60,12 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
 
   const form = useForm<CreateRecipeSchema>({
     resolver: zodResolver(createRecipeSchema),
-    // adding default values so they are not undefined, and correct error messages will appear
+    //* adding default values so they are not undefined, and correct error messages will appear
     defaultValues: {
       title: recipeToEdit?.title || "",
       ingredients: recipeToEdit?.ingredients.join("\n") || "",
       instructions: recipeToEdit?.instructions.join("\n") || "",
+      cuisine: recipeToEdit?.cuisine || "",
       tags: recipeToEdit?.tags.join(" ") || "#yummy",
       image: recipeToEdit?.image || "",
     },
@@ -60,7 +75,7 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
   const onSubmit = async (input: CreateRecipeSchema) => {
     // console.log(input);
     try {
-      // Update
+      //* Update
       if (recipeToEdit) {
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },
@@ -73,23 +88,23 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
         if (!response.ok) throw Error("Status code: " + response.status);
         toast({ description: "Recipe updated" });
       } else {
-        // Create
+        //* Create
         const response = await fetch("/api/recipes", {
           // next: { tags: ["recipes"] },
           method: "POST",
           body: JSON.stringify(input),
         });
         if (!response.ok) throw Error("Status code: " + response.status);
-        //reset input fields if successful
+        //* reset input fields if successful
         form.reset();
         setPreview("");
         setImgUrl("");
         toast({ description: "Recipe created!" });
       }
-      //refresh server component
+      //*refresh server component
       // router.push("/recipes");
-      router.refresh()
-      //close dialog
+      router.refresh();
+      //*close dialog
       setOpen(false);
     } catch (err) {
       console.log(err);
@@ -102,7 +117,13 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
     //Using Shadcn form components which uses react-hook-form under the hood
     // Make sure to import from the /ui folder which are the shadcn components not radix
     <div className="relative">
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(false);
+          closeSidebar && closeSidebar();
+        }}
+      >
         <section className="my-4 py-4 ">
           <DialogContent className="h-5/6">
             <DialogHeader>
@@ -161,6 +182,33 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="cuisine"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cuisine</FormLabel>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a cuisine" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Korean">Korean</SelectItem>
+                          <SelectItem value="Asian">Asian</SelectItem>
+                          <SelectItem value="Italian">Italian</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 {/* Recipe tags */}
                 <FormField
                   control={form.control}
@@ -171,10 +219,11 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                       <FormControl>
                         <Textarea placeholder="Tags" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      {/* <FormMessage /> */}
                     </FormItem>
                   )}
                 />
+                {/* Recipe image */}
                 <div className=" flex flex-col active:pointer-events-auto">
                   <FormLabel>Image</FormLabel>
                   {preview && (
@@ -211,33 +260,36 @@ const AddEditDialog = ({ open, setOpen, recipeToEdit }: Props) => {
                   >
                     <p className="text-sm">Upload</p>
                   </CldUploadButton>
+                  {/* Default images */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <p className="text-xs ">
+                        Or choose from{" "}
+                        <span className="font-semibold underline-offset-2 hover:cursor-pointer hover:underline">
+                          here
+                        </span>
+                      </p>
+                    </DialogTrigger>
+                    <DialogContent className="items-center justify-items-center">
+                      <DefaultImages form={form} setPreview={setPreview} />
+                    </DialogContent>
+                  </Dialog>
                 </div>
-                {/* Default images */}
-                <div>
+
+                {/*                 
                   <FormField
                     name="image"
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Or choose an image:</FormLabel>
-                        <FormControl >
+                        <FormControl>
                           <Input type="file" src={field.value!} />
-                          {/* <img src={field.image} className="w-24" alt="hello" /> */}
                         </FormControl>
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
-                  <FormLabel>Or choose an image:</FormLabel>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button>hello</button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DefaultImages form={form} setPreview={setPreview} />
-                    </DialogContent>
-                  </Dialog>
-                </div>
                 {/* Submit button */}
                 <DialogFooter className="gap-1">
                   {/* <Button type="submit">SUbmit</Button> */}

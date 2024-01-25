@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { title, ingredients, instructions, tags, image } = parseResult.data;
+    const { title, ingredients, instructions, cuisine, tags, image } = parseResult.data;
 
     //split strings based on spaces (`\s`), hashtags, line breaks
     //filter Boolean removes any empty elements from the arrays
@@ -29,8 +29,6 @@ export async function POST(req: Request) {
     const tagsArray = tags.split(/[\s#\r\n]+/).filter(Boolean);
     const instructionsArray = instructions.split(/\r?\n/).filter(Boolean);
     const { userId } = auth();
-    // const user = await currentUser();
-    // const author = user && user.username ? user.username : user?.firstName;
 
     if (!userId) {
       return Response.json({ error: "Unauthorised" }, { status: 401 });
@@ -41,6 +39,7 @@ export async function POST(req: Request) {
         title,
         ingredients: { set: ingredientsArray },
         instructions: {set: instructionsArray },
+        cuisine,
         tags: { set: tagsArray },
         image,
         author: {
@@ -68,7 +67,7 @@ export async function PUT(req: Request) {
       return Response.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { id, title, ingredients, instructions, tags, image } =
+    const { id, title, ingredients, instructions, cuisine, tags, image } =
       parseResult.data;
 
     //check recipe exists with the id
